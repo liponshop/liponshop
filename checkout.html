@@ -1,0 +1,927 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Checkout - LiponShop</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+--primary: #4f46e5;
+--primary-dark: #4338ca;
+--secondary: #f59e0b;
+--success: #10b981;
+--danger: #ef4444;
+--dark: #1f2937;
+--light: #f9fafb;
+--white: #ffffff;
+--gray: #6b7280;
+--border: #e5e7eb;
+}
+* {
+margin: 0;
+padding: 0;
+box-sizing: border-box;
+font-family: 'Poppins', sans-serif;
+}
+body {
+background: var(--light);
+color: var(--dark);
+line-height: 1.6;
+padding-bottom: 80px;
+}
+/* Header */
+.checkout-header {
+background: var(--white);
+padding: 20px 0;
+box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+position: sticky;
+top: 0;
+z-index: 100;
+}
+.header-content {
+max-width: 1200px;
+margin: 0 auto;
+padding: 0 15px;
+display: flex;
+justify-content: space-between;
+align-items: center;
+}
+.logo {
+font-size: 24px;
+font-weight: 700;
+color: var(--primary);
+text-decoration: none;
+}
+.back-link {
+color: var(--gray);
+text-decoration: none;
+display: flex;
+align-items: center;
+gap: 8px;
+font-weight: 500;
+transition: 0.3s;
+}
+.back-link:hover {
+color: var(--primary);
+}
+/* Main Container */
+.checkout-container {
+max-width: 1200px;
+margin: 30px auto;
+padding: 0 15px;
+display: grid;
+grid-template-columns: 1.5fr 1fr;
+gap: 25px;
+}
+/* Form Sections */
+.form-section {
+background: var(--white);
+padding: 25px;
+border-radius: 12px;
+box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+margin-bottom: 20px;
+}
+.section-title {
+font-size: 18px;
+font-weight: 600;
+margin-bottom: 20px;
+padding-bottom: 12px;
+border-bottom: 2px solid var(--light);
+display: flex;
+align-items: center;
+gap: 10px;
+}
+.section-title i {
+color: var(--primary);
+}
+.form-grid {
+display: grid;
+grid-template-columns: repeat(2, 1fr);
+gap: 15px;
+}
+.form-group {
+display: flex;
+flex-direction: column;
+gap: 6px;
+}
+.form-group.full-width {
+grid-column: 1 / -1;
+}
+.form-group label {
+font-size: 14px;
+font-weight: 500;
+color: var(--dark);
+}
+.form-group input,
+.form-group textarea,
+.form-group select {
+padding: 12px 15px;
+border: 2px solid var(--border);
+border-radius: 10px;
+font-size: 14px;
+transition: all 0.3s;
+}
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+border-color: var(--primary);
+outline: none;
+box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.1);
+}
+.form-group textarea {
+min-height: 100px;
+resize: vertical;
+}
+.form-hint {
+font-size: 12px;
+color: var(--gray);
+}
+/* Payment Methods */
+.payment-methods {
+display: flex;
+flex-direction: column;
+gap: 12px;
+}
+.payment-option {
+display: flex;
+align-items: center;
+gap: 12px;
+padding: 15px;
+border: 2px solid var(--border);
+border-radius: 10px;
+cursor: pointer;
+transition: all 0.3s;
+}
+.payment-option:hover,
+.payment-option.selected {
+border-color: var(--primary);
+background: #eef2ff;
+}
+.payment-option input {
+width: 18px;
+height: 18px;
+cursor: pointer;
+}
+.payment-option label {
+flex: 1;
+cursor: pointer;
+display: flex;
+align-items: center;
+gap: 10px;
+font-weight: 500;
+}
+.payment-option i {
+font-size: 20px;
+width: 24px;
+text-align: center;
+}
+.payment-option.bkash i { color: #e2136e; }
+.payment-option.cod i { color: var(--success); }
+.payment-details {
+margin-top: 15px;
+padding: 15px;
+background: var(--light);
+border-radius: 8px;
+display: none;
+}
+.payment-details.show {
+display: block;
+}
+.payment-details p {
+margin: 8px 0;
+font-size: 14px;
+color: var(--gray);
+}
+.payment-details strong {
+color: var(--dark);
+}
+.payment-details code {
+background: var(--white);
+padding: 4px 8px;
+border-radius: 4px;
+font-family: monospace;
+color: var(--primary);
+}
+/* Order Summary */
+.order-summary {
+background: var(--white);
+padding: 25px;
+border-radius: 12px;
+box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+height: fit-content;
+position: sticky;
+top: 100px;
+}
+.summary-title {
+font-size: 18px;
+font-weight: 600;
+margin-bottom: 20px;
+padding-bottom: 12px;
+border-bottom: 2px solid var(--light);
+}
+.cart-items {
+display: flex;
+flex-direction: column;
+gap: 15px;
+max-height: 300px;
+overflow-y: auto;
+padding-right: 5px;
+margin-bottom: 20px;
+}
+.cart-item {
+display: flex;
+gap: 12px;
+padding-bottom: 15px;
+border-bottom: 1px solid var(--border);
+}
+.cart-item:last-child {
+border-bottom: none;
+padding-bottom: 0;
+}
+.cart-item img {
+width: 60px;
+height: 60px;
+object-fit: cover;
+border-radius: 8px;
+background: var(--light);
+}
+.cart-item-info {
+flex: 1;
+}
+.cart-item-name {
+font-weight: 500;
+font-size: 14px;
+margin-bottom: 5px;
+}
+.cart-item-price {
+font-size: 13px;
+color: var(--gray);
+}
+.cart-item-qty {
+font-size: 12px;
+color: var(--gray);
+}
+.summary-row {
+display: flex;
+justify-content: space-between;
+padding: 10px 0;
+font-size: 14px;
+color: var(--gray);
+}
+.summary-row.total {
+border-top: 2px solid var(--border);
+margin-top: 10px;
+padding-top: 15px;
+font-size: 18px;
+font-weight: 700;
+color: var(--dark);
+}
+.summary-row.total span {
+color: var(--primary);
+}
+.delivery-note {
+background: #eef2ff;
+padding: 12px;
+border-radius: 8px;
+margin: 15px 0;
+font-size: 13px;
+color: var(--primary);
+display: flex;
+align-items: center;
+gap: 8px;
+}
+.place-order-btn {
+width: 100%;
+padding: 15px;
+background: linear-gradient(135deg, var(--success) 0%, #059669 100%);
+color: white;
+border: none;
+border-radius: 10px;
+font-size: 16px;
+font-weight: 700;
+cursor: pointer;
+margin-top: 20px;
+display: flex;
+align-items: center;
+justify-content: center;
+gap: 10px;
+transition: all 0.3s;
+}
+.place-order-btn:hover {
+transform: translateY(-2px);
+box-shadow: 0 10px 25px rgba(16, 185, 129, 0.3);
+}
+.place-order-btn:disabled {
+background: #9ca3af;
+cursor: not-allowed;
+transform: none;
+}
+.security-badges {
+display: flex;
+justify-content: center;
+gap: 15px;
+margin-top: 20px;
+padding-top: 20px;
+border-top: 1px solid var(--border);
+}
+.security-badges i {
+font-size: 20px;
+color: var(--success);
+}
+.security-badges span {
+font-size: 12px;
+color: var(--gray);
+}
+/* Success Modal */
+.modal {
+display: none;
+position: fixed;
+top: 0;
+left: 0;
+width: 100%;
+height: 100%;
+background: rgba(0,0,0,0.7);
+z-index: 2000;
+align-items: center;
+justify-content: center;
+animation: fadeIn 0.3s ease;
+}
+.modal.show {
+display: flex;
+}
+.modal-content {
+background: white;
+padding: 40px;
+border-radius: 20px;
+max-width: 450px;
+width: 90%;
+text-align: center;
+animation: slideUp 0.4s ease;
+box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+}
+.modal-icon {
+width: 80px;
+height: 80px;
+background: linear-gradient(135deg, var(--success) 0%, #059669 100%);
+border-radius: 50%;
+display: flex;
+align-items: center;
+justify-content: center;
+margin: 0 auto 20px;
+font-size: 40px;
+color: white;
+animation: scaleIn 0.5s ease;
+}
+@keyframes scaleIn {
+0% { transform: scale(0); }
+50% { transform: scale(1.2); }
+100% { transform: scale(1); }
+}
+.modal h3 {
+font-size: 24px;
+color: var(--dark);
+margin-bottom: 10px;
+}
+.modal p {
+margin: 10px 0;
+color: var(--gray);
+font-size: 14px;
+}
+.modal .order-id {
+background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+color: white;
+padding: 15px;
+border-radius: 10px;
+font-weight: 700;
+margin: 20px 0;
+font-size: 18px;
+}
+.modal-btn {
+background: var(--primary);
+color: white;
+border: none;
+padding: 15px 40px;
+border-radius: 10px;
+font-weight: 600;
+cursor: pointer;
+margin-top: 20px;
+transition: all 0.3s;
+}
+.modal-btn:hover {
+background: var(--primary-dark);
+transform: translateY(-2px);
+}
+@keyframes fadeIn {
+from { opacity: 0; }
+to { opacity: 1; }
+}
+@keyframes slideUp {
+from { opacity: 0; transform: translateY(30px); }
+to { opacity: 1; transform: translateY(0); }
+}
+/* Bottom Navigation */
+.bottom-nav {
+position: fixed;
+bottom: 0;
+left: 0;
+right: 0;
+background: var(--white);
+display: flex;
+justify-content: space-around;
+align-items: center;
+padding: 10px 0;
+box-shadow: 0 -2px 20px rgba(0,0,0,0.1);
+z-index: 2000;
+border-top: 1px solid var(--border);
+}
+.nav-item {
+display: flex;
+flex-direction: column;
+align-items: center;
+gap: 4px;
+padding: 8px 12px;
+color: var(--gray);
+text-decoration: none;
+font-size: 11px;
+font-weight: 500;
+transition: all 0.3s;
+flex: 1;
+max-width: 80px;
+position: relative;
+}
+.nav-item i {
+font-size: 20px;
+transition: all 0.3s;
+}
+.nav-item:hover, .nav-item.active {
+color: var(--primary);
+}
+.nav-item.active i {
+transform: translateY(-3px);
+}
+.nav-item .nav-badge {
+position: absolute;
+top: 5px;
+right: 20%;
+background: var(--danger);
+color: white;
+font-size: 10px;
+padding: 2px 6px;
+border-radius: 10px;
+min-width: 18px;
+text-align: center;
+}
+/* Mobile Responsive */
+@media (max-width: 900px) {
+.checkout-container {
+grid-template-columns: 1fr;
+}
+.order-summary {
+position: static;
+}
+.form-grid {
+grid-template-columns: 1fr;
+}
+}
+@media (max-width: 480px) {
+.checkout-header {
+padding: 15px 0;
+}
+.form-section {
+padding: 20px;
+}
+.place-order-btn {
+padding: 12px;
+font-size: 14px;
+}
+}
+</style>
+</head>
+<body>
+<!-- Header -->
+<div class="checkout-header">
+<div class="header-content">
+<a href="index.html" class="logo">
+<i class="fas fa-shopping-bag"></i> LiponShop
+</a>
+<a href="cart.html" class="back-link">
+<i class="fas fa-arrow-left"></i> Back to Cart
+</a>
+</div>
+</div>
+<!-- Main Content -->
+<div class="checkout-container">
+<!-- Left: Forms -->
+<div class="checkout-forms">
+<!-- Customer Information -->
+<div class="form-section">
+<h3 class="section-title">
+<i class="fas fa-user"></i> Customer Information
+</h3>
+<div class="form-grid">
+<div class="form-group full-width">
+<label>Full Name *</label>
+<input type="text" id="custName" placeholder="Enter your full name" required>
+</div>
+<div class="form-group">
+<label>Phone Number *</label>
+<input type="tel" id="custPhone" placeholder="017XXXXXXXX" pattern="01[3-9][0-9]{8}" required>
+<span class="form-hint">Format: 01712345678</span>
+</div>
+<div class="form-group">
+<label>Email Address</label>
+<input type="email" id="custEmail" placeholder="your@email.com">
+</div>
+<div class="form-group full-width">
+<label>Delivery Address (House/Road) *</label>
+<textarea id="custAddress" placeholder="House No, Road No, Block/Sector" required></textarea>
+</div>
+<!-- District -->
+<div class="form-group">
+<label>District *</label>
+<select id="custDistrict" required onchange="loadThanas()">
+<option value="">Select District</option>
+<option value="Dhaka">Dhaka</option>
+<option value="Chittagong">Chittagong</option>
+<option value="Gaibandha">Gaibandha</option>
+<option value="Sylhet">Sylhet</option>
+<option value="Rajshahi">Rajshahi</option>
+<option value="Khulna">Khulna</option>
+<option value="Barisal">Barisal</option>
+<option value="Rangpur">Rangpur</option>
+<option value="Mymensingh">Mymensingh</option>
+</select>
+</div>
+<!-- Thana/Upazila -->
+<div class="form-group">
+<label>Thana/Upazila *</label>
+<select id="custThana" required onchange="loadAreas()">
+<option value="">First Select District</option>
+</select>
+</div>
+<!-- Area/Zone/Ward -->
+<div class="form-group">
+<label>Area/Zone/Ward</label>
+<select id="custArea">
+<option value="">First Select Thana</option>
+</select>
+<span class="form-hint">Optional - For specific area/sector/ward</span>
+</div>
+<div class="form-group">
+<label>Postal Code</label>
+<input type="text" id="custPostal" placeholder="1200">
+</div>
+</div>
+</div>
+<!-- Payment Method -->
+<div class="form-section">
+<h3 class="section-title">
+<i class="fas fa-credit-card"></i> Payment Method
+</h3>
+<div class="payment-methods">
+<label class="payment-option cod selected">
+<input type="radio" name="payment" value="cod" checked>
+<i class="fas fa-money-bill-wave"></i>
+<span>Cash on Delivery</span>
+</label>
+<label class="payment-option bkash">
+<input type="radio" name="payment" value="bkash">
+<i class="fas fa-mobile-alt"></i>
+<span>bKash</span>
+</label>
+<div class="payment-details" id="bkashDetails">
+<p><strong>Send Money to:</strong> <code>01748048267</code></p>
+<p><strong>Account Type:</strong> Personal</p>
+<p><strong>Reference:</strong> LiponShop</p>
+<div class="form-group" style="margin-top:10px;">
+<label>Transaction ID *</label>
+<input type="text" id="bkashTrx" placeholder="Enter 10-digit TrxID">
+</div>
+</div>
+</div>
+</div>
+<!-- Order Notes -->
+<div class="form-section">
+<h3 class="section-title">
+<i class="fas fa-sticky-note"></i> Order Notes (Optional)
+</h3>
+<div class="form-group">
+<textarea id="orderNotes" placeholder="Any special instructions for delivery?"></textarea>
+</div>
+</div>
+</div>
+<!-- Right: Order Summary -->
+<div class="order-summary">
+<h3 class="summary-title">
+<i class="fas fa-receipt"></i> Order Summary
+</h3>
+<div class="cart-items" id="checkoutItems"></div>
+<div class="summary-row">
+<span>Subtotal</span>
+<span id="summarySubtotal">৳0</span>
+</div>
+<div class="summary-row">
+<span>Delivery Charge</span>
+<span id="summaryDelivery">৳60</span>
+</div>
+<div class="summary-row">
+<span>Discount</span>
+<span id="summaryDiscount">-৳0</span>
+</div>
+<div class="summary-row total">
+<span>Total</span>
+<span>৳<span id="summaryTotal">0</span></span>
+</div>
+<div class="delivery-note">
+<i class="fas fa-truck"></i> Free delivery on orders over ৳1000 inside Gaibandha
+</div>
+<button class="place-order-btn" id="placeOrderBtn" onclick="placeOrder()">
+<i class="fas fa-lock"></i> Place Order - <span id="btnTotal">৳0</span>
+</button>
+<div class="security-badges">
+<div style="text-align: center;">
+<i class="fas fa-shield-alt"></i>
+<span>Secure Checkout</span>
+</div>
+<div style="text-align: center;">
+<i class="fas fa-undo"></i>
+<span>7 Days Return</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Bottom Navigation -->
+<nav class="bottom-nav">
+<a href="index.html" class="nav-item">
+<i class="fas fa-home"></i>
+<span>Home</span>
+</a>
+<a href="#" class="nav-item" onclick="alert('Coming Soon!'); return false;">
+<i class="fas fa-comment-alt"></i>
+<span>Message</span>
+<span class="nav-badge">3</span>
+</a>
+<a href="customer-login.html" class="nav-item" id="navAccount">
+<i class="fas fa-user"></i>
+<span>Account</span>
+</a>
+<a href="cart.html" class="nav-item">
+<i class="fas fa-shopping-cart"></i>
+<span>Cart</span>
+<span class="nav-badge" id="bottomCartCount">0</span>
+</a>
+</nav>
+<!-- Success Modal -->
+<div class="modal" id="successModal">
+<div class="modal-content">
+<div class="modal-icon">
+<i class="fas fa-check"></i>
+</div>
+<h3>🎉 Order Placed Successfully!</h3>
+<p>Thank you for shopping with LiponShop</p>
+<div class="order-id">
+Order ID: <span id="modalOrderId">#ORD-XXXX</span>
+</div>
+<p style="font-size:13px;">
+<i class="fas fa-info-circle"></i> 
+We will call you shortly to confirm your order.
+</p>
+<button class="modal-btn" onclick="goToHome()">Continue Shopping</button>
+</div>
+</div>
+<script src="js/products.js"></script>
+<script src="js/cart.js"></script>
+<script>
+// ==============================
+// CHECKOUT LOGIC
+// ==============================
+document.addEventListener('DOMContentLoaded', () => {
+const cart = JSON.parse(localStorage.getItem('cart')) || [];
+if (cart.length === 0) {
+window.location.href = 'cart.html';
+return;
+}
+loadCheckoutItems();
+updateSummary();
+setupPaymentHandlers();
+updateCartCount();
+});
+
+// Update Cart Count
+function updateCartCount() {
+const cart = JSON.parse(localStorage.getItem('cart')) || [];
+const count = cart.reduce((sum, item) => sum + item.quantity, 0);
+const bottomCartCount = document.getElementById('bottomCartCount');
+if (bottomCartCount) {
+bottomCartCount.textContent = count;
+}
+}
+
+function loadCheckoutItems() {
+const container = document.getElementById('checkoutItems');
+const cart = JSON.parse(localStorage.getItem('cart')) || [];
+const products = JSON.parse(localStorage.getItem('products')) || [];
+container.innerHTML = '';
+cart.forEach(item => {
+const product = products.find(p => p.id === item.id) || item;
+const div = document.createElement('div');
+div.className = 'cart-item';
+div.innerHTML = `
+<img src="${product.img}" alt="${product.name}" onerror="this.src='https://via.placeholder.com/60?text=No+Img'">
+<div class="cart-item-info">
+<p class="cart-item-name">${product.name}</p>
+<p class="cart-item-price">৳${product.price} × ${item.quantity}</p>
+<p class="cart-item-qty">Subtotal: ৳${product.price * item.quantity}</p>
+</div>
+`;
+container.appendChild(div);
+});
+}
+
+function updateSummary() {
+const cart = JSON.parse(localStorage.getItem('cart')) || [];
+const products = JSON.parse(localStorage.getItem('products')) || [];
+const subtotal = cart.reduce((sum, item) => {
+const product = products.find(p => p.id === item.id);
+return sum + (product?.price || 0) * item.quantity;
+}, 0);
+const district = document.getElementById('custDistrict')?.value;
+let deliveryCharge = (district === 'Gaibandha' && subtotal >= 1000) ? 0 : 60;
+const discount = 0;
+const total = subtotal + deliveryCharge - discount;
+document.getElementById('summarySubtotal').innerText = '৳' + subtotal.toLocaleString('en-BD');
+document.getElementById('summaryDelivery').innerText = '৳' + deliveryCharge;
+document.getElementById('summaryDiscount').innerText = '-৳' + discount;
+document.getElementById('summaryTotal').innerText = total.toLocaleString('en-BD');
+document.getElementById('btnTotal').innerText = '৳' + total.toLocaleString('en-BD');
+return { subtotal, deliveryCharge, discount, total };
+}
+
+function setupPaymentHandlers() {
+const paymentOptions = document.querySelectorAll('.payment-option');
+const paymentInputs = document.querySelectorAll('input[name="payment"]');
+paymentInputs.forEach(input => {
+input.addEventListener('change', function() {
+paymentOptions.forEach(opt => opt.classList.remove('selected'));
+this.closest('.payment-option').classList.add('selected');
+document.querySelectorAll('.payment-details').forEach(el => el.classList.remove('show'));
+const method = this.value;
+if (method === 'bkash') {
+document.getElementById('bkashDetails').classList.add('show');
+}
+});
+});
+const districtSelect = document.getElementById('custDistrict');
+if (districtSelect) {
+districtSelect.addEventListener('change', updateSummary);
+}
+}
+
+function placeOrder() {
+const name = document.getElementById('custName').value.trim();
+const phone = document.getElementById('custPhone').value.trim();
+const address = document.getElementById('custAddress').value.trim();
+const district = document.getElementById('custDistrict').value;
+if (!name || !phone || !address || !district) {
+alert('Please fill all required fields! (*)');
+return;
+}
+const phoneRegex = /^01[3-9][0-9]{8}$/;
+if (!phoneRegex.test(phone)) {
+alert('Please enter a valid Bangladesh phone number (e.g., 01712345678)');
+return;
+}
+const paymentMethod = document.querySelector('input[name="payment"]:checked').value;
+if (paymentMethod === 'bkash') {
+const trx = document.getElementById('bkashTrx').value.trim();
+if (!trx || trx.length < 10) {
+alert('Please enter valid bKash Transaction ID');
+return;
+}
+}
+const btn = document.getElementById('placeOrderBtn');
+btn.disabled = true;
+btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+const cart = JSON.parse(localStorage.getItem('cart')) || [];
+const products = JSON.parse(localStorage.getItem('products')) || [];
+const orderItems = cart.map(item => {
+const product = products.find(p => p.id === item.id);
+return {
+id: item.id,
+name: product ? product.name : item.name,
+price: product ? product.price : item.price,
+img: product ? product.img : 'https://via.placeholder.com/200?text=No+Image',
+quantity: item.quantity
+};
+});
+const { total } = updateSummary();
+const orderId = 'ORD-' + Date.now().toString().slice(-6);
+const orderData = {
+id: orderId,
+customer: name,
+customerEmail: localStorage.getItem('customerEmail') || '',
+phone: phone,
+address: address,
+district: district,
+postal: document.getElementById('custPostal').value,
+payment: paymentMethod,
+paymentTrx: paymentMethod === 'cod' ? null : (paymentMethod === 'bkash' ? document.getElementById('bkashTrx').value : null),
+items: orderItems,
+total: total,
+status: 'pending',
+date: new Date().toISOString(),
+notes: document.getElementById('orderNotes').value,
+referrer: localStorage.getItem('currentReferrer')
+};
+const orders = JSON.parse(localStorage.getItem('orders')) || [];
+orders.push(orderData);
+localStorage.setItem('orders', JSON.stringify(orders));
+if (orderData.referrer) {
+processResellerCommission(orderData.referrer, total * 0.10, orderId);
+}
+localStorage.removeItem('cart');
+localStorage.removeItem('currentReferrer');
+localStorage.removeItem('refProduct');
+setTimeout(() => {
+document.getElementById('modalOrderId').innerText = orderId;
+document.getElementById('successModal').classList.add('show');
+updateCartCount();
+}, 1500);
+}
+
+function processResellerCommission(resellerId, commission, orderId) {
+const currentProfit = parseFloat(localStorage.getItem('resellerProfit')) || 0;
+const newProfit = currentProfit + commission;
+localStorage.setItem('resellerProfit', newProfit.toFixed(2));
+const logs = JSON.parse(localStorage.getItem('commissionLogs')) || [];
+logs.push({ resellerId, amount: commission.toFixed(2), orderId, date: new Date().toISOString() });
+localStorage.setItem('commissionLogs', JSON.stringify(logs));
+}
+
+function goToHome() {
+window.location.href = 'index.html';
+}
+
+// Location Data
+const locationData = {
+"Dhaka": {
+"Dhaka Sadar": { "areas": ["Motijheel", "Dilkusha", "Bangshal"] },
+"Mirpur": { "areas": ["Mirpur-1", "Mirpur-10", "Mirpur DOHS"] },
+"Uttara": { "areas": ["Uttara Sector 1", "Uttara Sector 7"] }
+},
+"Gaibandha": {
+"Gaibandha Sadar": { "areas": ["Gaibandha Paurashava", "Sadar Road", "Bonarpara Bazar"] }
+}
+};
+
+const districtThanaData = {
+"Dhaka": ["Dhaka Sadar", "Mirpur", "Uttara", "Gulshan", "Dhanmondi"],
+"Gaibandha": ["Gaibandha Sadar", "Gobindaganj", "Palashbari", "Saghata"],
+"Chittagong": ["Chittagong Sadar", "Panchlaish", "Khulshi"],
+"Sylhet": ["Sylhet Sadar", "Companiganj", "Gowainghat"]
+};
+
+function loadThanas() {
+const districtSelect = document.getElementById('custDistrict');
+const thanaSelect = document.getElementById('custThana');
+const areaSelect = document.getElementById('custArea');
+const selectedDistrict = districtSelect.value;
+thanaSelect.innerHTML = '<option value="">Select Thana/Upazila</option>';
+areaSelect.innerHTML = '<option value="">First Select Thana</option>';
+areaSelect.disabled = true;
+if (selectedDistrict && districtThanaData[selectedDistrict]) {
+districtThanaData[selectedDistrict].forEach(thana => {
+const option = document.createElement('option');
+option.value = thana;
+option.textContent = thana;
+thanaSelect.appendChild(option);
+});
+thanaSelect.disabled = false;
+}
+}
+
+function loadAreas() {
+const districtSelect = document.getElementById('custDistrict');
+const thanaSelect = document.getElementById('custThana');
+const areaSelect = document.getElementById('custArea');
+const selectedDistrict = districtSelect.value;
+const selectedThana = thanaSelect.value;
+areaSelect.innerHTML = '<option value="">Select Area/Zone/Ward</option>';
+if (selectedDistrict && selectedThana && locationData[selectedDistrict]) {
+const districtData = locationData[selectedDistrict];
+if (districtData[selectedThana] && districtData[selectedThana].areas) {
+districtData[selectedThana].areas.forEach(area => {
+const option = document.createElement('option');
+option.value = area;
+option.textContent = area;
+areaSelect.appendChild(option);
+});
+areaSelect.disabled = false;
+}
+}
+}
+</script>
+</body>
+</html>

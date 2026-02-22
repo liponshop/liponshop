@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - LiponShop</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #0066FF;
+            --secondary: #FF9900;
+            --dark: #1A1A1A;
+            --light: #F5F5F5;
+            --white: #FFFFFF;
+            --success: #00C853;
+            --danger: #dc3545;
+            --warning: #ffc107;
+            --sidebar-width: 260px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: var(--light);
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: var(--sidebar-width);
+            background: linear-gradient(180deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            transition: 0.3s;
+            z-index: 1000;
+        }
+
+        .sidebar-header {
+            padding: 25px 20px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .sidebar-brand {
+            font-size: 24px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .sidebar-menu {
+            padding: 20px 0;
+        }
+
+        .menu-item {
+            padding: 15px 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: rgba(255,255,255,0.8);
+            text-decoration: none;
+            transition: 0.3s;
+            cursor: pointer;
+        }
+
+        .menu-item:hover, .menu-item.active {
+            background: rgba(255,255,255,0.1);
+            color: white;
+            border-left: 4px solid var(--secondary);
+        }
+
+        .menu-item i {
+            font-size: 18px;
+            width: 24px;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            margin-left: var(--sidebar-width);
+            transition: 0.3s;
+        }
+
+        .top-bar {
+            background: var(--white);
+            padding: 20px 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .page-header h1 {
+            font-size: 28px;
+            color: var(--dark);
+            margin-bottom: 5px;
+        }
+
+        .page-header p {
+            color: var(--gray);
+            font-size: 14px;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+        }
+
+        /* Stats Cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            padding: 30px;
+        }
+
+        .stat-card {
+            background: var(--white);
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            transition: 0.3s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+        }
+
+        .stat-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+
+        .stat-icon.products { background: #e3f2fd; color: var(--primary); }
+        .stat-icon.orders { background: #e8f5e9; color: var(--success); }
+        .stat-icon.revenue { background: #fff3e0; color: var(--secondary); }
+        .stat-icon.customers { background: #fce4ec; color: #e91e63; }
+
+        .stat-details h3 {
+            font-size: 14px;
+            color: var(--gray);
+            margin-bottom: 5px;
+        }
+
+        .stat-details p {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--dark);
+        }
+
+        /* Content Sections */
+        .content-section {
+            background: var(--white);
+            margin: 0 30px 30px;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        }
+
+        .section-title {
+            font-size: 20px;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--light);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* Table Styles */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .data-table thead {
+            background: var(--light);
+        }
+
+        .data-table th {
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+            color: var(--dark);
+            font-size: 14px;
+        }
+
+        .data-table td {
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+            font-size: 14px;
+        }
+
+        .data-table tr:hover {
+            background: #f8f9fa;
+        }
+
+        .status-badge {
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .status-pending { background: #fff3cd; color: #856404; }
+        .status-completed { background: #d4edda; color: #155724; }
+        .status-processing { background: #d1ecf1; color: #0c5460; }
+
+        .action-btns {
+            display: flex;
+            gap: 8px;
+        }
+
+        .btn-sm {
+            padding: 6px 12px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: 0.2s;
+        }
+
+        .btn-view { background: var(--primary); color: white; }
+        .btn-edit { background: var(--warning); color: var(--dark); }
+        .btn-delete { background: var(--danger); color: white; }
+
+        .btn-sm:hover {
+            transform: translateY(-2px);
+            opacity: 0.9;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            color: var(--gray);
+        }
+
+        .empty-state i {
+            font-size: 48px;
+            margin-bottom: 15px;
+            opacity: 0.5;
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+            .main-content {
+                margin-left: 0;
+            }
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Sidebar -->
+<div class="sidebar">
+    <div class="sidebar-header">
+        <div class="sidebar-brand">
+            <i class="fas fa-shopping-bag"></i>
+            <span>LiponShop</span>
+        </div>
+    </div>
+    <div class="sidebar-menu">
+        <a href="admin.html" class="menu-item active">
+            <i class="fas fa-home"></i>
+            <span>Dashboard</span>
+        </a>
+        <a href="#" class="menu-item">
+            <i class="fas fa-box"></i>
+            <span>Products</span>
+        </a>
+        <a href="#" class="menu-item">
+            <i class="fas fa-shopping-cart"></i>
+            <span>Orders</span>
+        </a>
+        <a href="admin-add-product.html" class="menu-item">
+            <i class="fas fa-plus-circle"></i>
+            <span>Add Product</span>
+        </a>
+        <a href="#" class="menu-item">
+            <i class="fas fa-users"></i>
+            <span>Customers</span>
+        </a>
+        <a href="#" class="menu-item">
+            <i class="fas fa-chart-line"></i>
+            <span>Reports</span>
+        </a>
+        <a href="index.html" class="menu-item">
+            <i class="fas fa-store"></i>
+            <span>View Shop</span>
+        </a>
+        <a href="#" class="menu-item" onclick="logout()">
+            <i class="fas fa-sign-out-alt"></i>
+            <span>Logout</span>
+        </a>
+    </div>
+</div>
+
+<!-- Main Content -->
+<div class="main-content">
+    <div class="top-bar">
+        <div class="page-header">
+            <h1>Dashboard</h1>
+            <p>Welcome back, Admin! 👋</p>
+        </div>
+        <div class="user-info">
+            <div class="user-avatar">A</div>
+            <div>
+                <div style="font-weight: 600;">Admin</div>
+                <div style="font-size: 12px; color: var(--gray);">admin@liponshop.com</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Stats Cards -->
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-icon products">
+                <i class="fas fa-box"></i>
+            </div>
+            <div class="stat-details">
+                <h3>Total Products</h3>
+                <p id="totalProducts">0</p>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon orders">
+                <i class="fas fa-shopping-cart"></i>
+            </div>
+            <div class="stat-details">
+                <h3>Total Orders</h3>
+                <p id="totalOrders">0</p>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon revenue">
+                <i class="fas fa-taka-sign"></i>
+            </div>
+            <div class="stat-details">
+                <h3>Total Revenue</h3>
+                <p id="totalRevenue">৳0</p>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon customers">
+                <i class="fas fa-users"></i>
+            </div>
+            <div class="stat-details">
+                <h3>Customers</h3>
+                <p id="totalCustomers">0</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Orders -->
+    <div class="content-section">
+        <h2 class="section-title">
+            <i class="fas fa-clock"></i> Recent Orders
+        </h2>
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Order ID</th>
+                    <th>Customer</th>
+                    <th>Amount</th>
+                    <th>Status</th>
+                    <th>Date</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="ordersTable">
+                <tr>
+                    <td colspan="6" class="empty-state">
+                        <i class="fas fa-inbox"></i>
+                        <p>No orders yet</p>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Top Products -->
+    <div class="content-section">
+        <h2 class="section-title">
+            <i class="fas fa-star"></i> Top Products
+        </h2>
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Product Name</th>
+                    <th>Category</th>
+                    <th>Price</th>
+                    <th>Stock</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="productsTable">
+                <tr>
+                    <td colspan="5" class="empty-state">
+                        <i class="fas fa-box-open"></i>
+                        <p>No products available</p>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script src="js/products.js"></script>
+<script>
+    // Load dashboard data
+    document.addEventListener('DOMContentLoaded', () => {
+        loadStats();
+        loadOrders();
+        loadProducts();
+    });
+
+    function loadStats() {
+        const products = JSON.parse(localStorage.getItem('products')) || [];
+        const orders = JSON.parse(localStorage.getItem('orders')) || [];
+        const customers = JSON.parse(localStorage.getItem('customers')) || [];
+
+        document.getElementById('totalProducts').innerText = products.length;
+        document.getElementById('totalOrders').innerText = orders.length;
+        document.getElementById('totalCustomers').innerText = customers.length;
+
+        const revenue = orders.reduce((sum, order) => sum + (order.total || 0), 0);
+        document.getElementById('totalRevenue').innerText = '৳' + revenue.toLocaleString('en-BD');
+    }
+
+    function loadOrders() {
+        const orders = JSON.parse(localStorage.getItem('orders')) || [];
+        const tbody = document.getElementById('ordersTable');
+
+        if (orders.length === 0) {
+            tbody.innerHTML = `
+                <tr>
+                    <td colspan="6" class="empty-state">
+                        <i class="fas fa-inbox"></i>
+                        <p>No orders yet</p>
+                    </td>
+                </tr>
+            `;
+            return;
+        }
+
+        tbody.innerHTML = '';
+        orders.slice(-5).reverse().forEach(order => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td><strong>${order.id}</strong></td>
+                <td>${order.customer}</td>
+                <td>৳${order.total}</td>
+                <td><span class="status-badge status-${order.status || 'pending'}">${(order.status || 'Pending').toUpperCase()}</span></td>
+                <td>${new Date(order.date).toLocaleDateString()}</td>
+                <td class="action-btns">
+                    <button class="btn-sm btn-view"><i class="fas fa-eye"></i></button>
+                    <button class="btn-sm btn-edit"><i class="fas fa-edit"></i></button>
+                </td>
+            `;
+            tbody.appendChild(row);
+        });
+    }
+
+    function loadProducts() {
+        const products = JSON.parse(localStorage.getItem('products')) || [];
+        const tbody = document.getElementById('productsTable');
+
+        if (products.length === 0) {
+            tbody.innerHTML = `
+                <tr>
+                    <td colspan="5" class="empty-state">
+                        <i class="fas fa-box-open"></i>
+                        <p>No products available</p>
+                    </td>
+                </tr>
+            `;
+            return;
+        }
+
+        tbody.innerHTML = '';
+        products.slice(0, 5).forEach(product => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td><strong>${product.name}</strong></td>
+                <td>${product.category}</td>
+                <td>৳${product.price}</td>
+                <td>${product.stock || 0}</td>
+                <td class="action-btns">
+                    <button class="btn-sm btn-view"><i class="fas fa-eye"></i></button>
+                    <button class="btn-sm btn-edit"><i class="fas fa-edit"></i></button>
+                    <button class="btn-sm btn-delete"><i class="fas fa-trash"></i></button>
+                </td>
+            `;
+            tbody.appendChild(row);
+        });
+    }
+
+    function logout() {
+        if (confirm('Are you sure you want to logout?')) {
+            localStorage.removeItem('adminLogin');
+            window.location.href = 'admin-login.html';
+        }
+    }
+</script>
+
+</body>
+</html>

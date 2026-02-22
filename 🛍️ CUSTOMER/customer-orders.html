@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Orders - LiponShop</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .orders-page {
+            min-height: 100vh;
+            background: #F5F5F5;
+            padding: 20px 0;
+        }
+        .orders-header {
+            background: white;
+            padding: 20px 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            margin-bottom: 30px;
+        }
+        .orders-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+        .page-title {
+            font-size: 24px;
+            color: #1A1A1A;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .back-link {
+            color: #0066FF;
+            text-decoration: none;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .back-link:hover { text-decoration: underline; }
+        
+        /* Orders Grid */
+        .orders-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .order-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            transition: 0.3s;
+        }
+        .order-card:hover {
+            box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+        }
+        .order-header {
+            background: #f8f9fa;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        .order-id {
+            font-weight: 700;
+            color: #0066FF;
+            font-size: 16px;
+        }
+        .order-date {
+            color: #757575;
+            font-size: 14px;
+        }
+        .order-status {
+            padding: 6px 15px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+        }
+        .status-pending { background: #FFF3CD; color: #856404; }
+        .status-processing { background: #DBEAFE; color: #1E40AF; }
+        .status-delivered { background: #D1FAE5; color: #065F46; }
+        .status-cancelled { background: #FEE2E2; color: #991B1B; }
+        
+        .order-body {
+            padding: 20px;
+        }
+        .order-items {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        .order-item {
+            display: flex;
+            gap: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #f1f1f1;
+        }
+        .order-item:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+        .order-item img {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 8px;
+            background: #f9f9f9;
+        }
+        .order-item-info {
+            flex: 1;
+        }
+        .order-item-name {
+            font-weight: 600;
+            color: #1A1A1A;
+            margin-bottom: 5px;
+        }
+        .order-item-price {
+            color: #0066FF;
+            font-weight: 700;
+            font-size: 15px;
+        }
+        .order-item-qty {
+            color: #757575;
+            font-size: 13px;
+            margin-top: 3px;
+        }
+        
+        .order-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 20px;
+            border-top: 2px solid #f1f1f1;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        .order-total {
+            font-size: 18px;
+            font-weight: 700;
+            color: #1A1A1A;
+        }
+        .order-total span {
+            color: #0066FF;
+            font-size: 22px;
+        }
+        .order-actions {
+            display: flex;
+            gap: 10px;
+        }
+        .btn-order {
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            border: none;
+            transition: 0.2s;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .btn-view {
+            background: #0066FF;
+            color: white;
+        }
+        .btn-view:hover { background: #0040cc; }
+        .btn-reorder {
+            background: #00C853;
+            color: white;
+        }
+        .btn-reorder:hover { background: #009624; }
+        
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            background: white;
+            border-radius: 12px;
+        }
+        .empty-state i {
+            font-size: 60px;
+            color: #ddd;
+            margin-bottom: 20px;
+        }
+        .empty-state h3 {
+            color: #1A1A1A;
+            margin-bottom: 10px;
+        }
+        .empty-state p {
+            color: #757575;
+            margin-bottom: 25px;
+        }
+        .empty-state .btn-primary {
+            background: #0066FF;
+            color: white;
+            padding: 12px 30px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        
+        /* Customer Info Bar */
+        .customer-info-bar {
+            background: linear-gradient(135deg, #0066FF 0%, #0040cc 100%);
+            color: white;
+            padding: 15px 20px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        .customer-info-bar .welcome {
+            font-size: 16px;
+            font-weight: 600;
+        }
+        .customer-info-bar .contact {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+        
+        /* Dark Mode */
+        .dark .orders-page { background: #0f172a; }
+        .dark .orders-header,
+        .dark .order-card,
+        .dark .empty-state { background: #1e293b; }
+        .dark .page-title,
+        .dark .order-item-name,
+        .dark .order-total { color: #f1f5f9; }
+        .dark .order-header { background: #334155; border-bottom-color: #475569; }
+        .dark .order-date,
+        .dark .order-item-qty,
+        .dark .empty-state p { color: #94a3b8; }
+        .dark .order-item { border-bottom-color: #334155; }
+        .dark .order-footer { border-top-color: #334155; }
+        
+        @media (max-width: 768px) {
+            .order-header { flex-direction: column; align-items: flex-start; }
+            .order-footer { flex-direction: column; align-items: flex-start; }
+            .customer-info-bar { flex-direction: column; text-align: center; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Header -->
+<div class="orders-header">
+    <div class="orders-container flex-between">
+        <h1 class="page-title">
+            <i class="fas fa-box"></i> My Orders
+        </h1>
+        <a href="index.html" class="back-link">
+            <i class="fas fa-arrow-left"></i> Back to Shop
+        </a>
+    </div>
+</div>
+
+<!-- Main Content -->
+<div class="orders-page">
+    <div class="orders-container">
+        
+        <!-- Customer Info -->
+        <div class="customer-info-bar">
+            <div class="welcome">
+                <i class="fas fa-user-circle"></i> Welcome, <span id="customerNameDisplay">Customer</span>
+            </div>
+            <div class="contact">
+                <i class="fas fa-phone"></i> <span id="customerPhoneDisplay">017XXXXXXXX</span>
+            </div>
+        </div>
+        
+        <!-- Orders List -->
+        <div class="orders-grid" id="ordersGrid">
+            <!-- Orders will load here -->
+        </div>
+        
+    </div>
+</div>
+
+<!-- Scripts -->
+<script src="js/ui.js"></script>
+<script>
+    // ==============================
+    // ORDER HISTORY LOGIC
+    // ==============================
+    
+    document.addEventListener('DOMContentLoaded', () => {
+        // Check if customer is logged in
+        const customerEmail = localStorage.getItem('customerEmail');
+        if (!customerEmail) {
+            window.location.href = 'customer-login.html';
+            return;
+        }
+        
+        // Display customer info
+        document.getElementById('customerNameDisplay').innerText = 
+            localStorage.getItem('customerName') || 'Customer';
+        document.getElementById('customerPhoneDisplay').innerText = 
+            localStorage.getItem('customerPhone') || 'N/A';
+        
+        // Load orders
+        loadCustomerOrders(customerEmail);
+    });
+    
+    // Load customer orders
+    function loadCustomerOrders(customerEmail) {
+        const ordersGrid = document.getElementById('ordersGrid');
+        const allOrders = JSON.parse(localStorage.getItem('orders')) || [];
+        
+        // Filter orders by customer email (or phone)
+        const customerPhone = localStorage.getItem('customerPhone');
+        const customerOrders = allOrders.filter(order => 
+            order.customerEmail === customerEmail || order.phone === customerPhone
+        );
+        
+        if (customerOrders.length === 0) {
+            ordersGrid.innerHTML = `
+                <div class="empty-state">
+                    <i class="fas fa-shopping-bag"></i>
+                    <h3>No Orders Yet</h3>
+                    <p>You haven't placed any orders yet. Start shopping now!</p>
+                    <a href="index.html" class="btn-primary">
+                        <i class="fas fa-shopping-cart"></i> Shop Now
+                    </a>
+                </div>
+            `;
+            return;
+        }
+        
+        // Sort by newest first
+        customerOrders.reverse();
+        
+        ordersGrid.innerHTML = '';
+        customerOrders.forEach(order => {
+            const orderCard = createOrderCard(order);
+            ordersGrid.appendChild(orderCard);
+        });
+    }
+    
+    // Create order card
+    function createOrderCard(order) {
+        const card = document.createElement('div');
+        card.className = 'order-card';
+        
+        // Format date
+        const orderDate = new Date(order.date).toLocaleDateString('en-BD', {
+            year: 'numeric',
+            month: 'short',
+            day: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
+        });
+        
+        // Status class
+        const statusClass = `status-${order.status || 'pending'}`;
+        const statusText = (order.status || 'Pending').toUpperCase();
+        
+        // Items HTML
+        let itemsHTML = '';
+        if (order.items && order.items.length > 0) {
+            order.items.forEach(item => {
+                itemsHTML += `
+                    <div class="order-item">
+                        <img src="${item.img || 'https://via.placeholder.com/80?text=Product'}" 
+                             alt="${item.name}"  
+                              onerror="this.src='https://via.placeholder.com/80?text=No+Image'">
+                        <div class="order-item-info">
+                            <div class="order-item-name">${item.name}</div>
+                            <div class="order-item-price">৳${item.price}</div>
+                            <div class="order-item-qty">Quantity: ${item.quantity || 1}</div>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+        
+        card.innerHTML = `
+            <div class="order-header">
+                <div>
+                    <div class="order-id">${order.id || 'ORD-UNKNOWN'}</div>
+                    <div class="order-date"><i class="far fa-clock"></i> ${orderDate}</div>
+                </div>
+                <div class="order-status ${statusClass}">${statusText}</div>
+            </div>
+            <div class="order-body">
+                <div class="order-items">
+                    ${itemsHTML}
+                </div>
+                <div class="order-footer">
+                    <div class="order-total">
+                        Total: <span>৳${order.total || 0}</span>
+                    </div>
+                    <div class="order-actions">
+                        <button class="btn-order btn-view" onclick="viewOrderDetails('${order.id}')">
+                            <i class="fas fa-eye"></i> View Details
+                        </button>
+                        ${order.status !== 'cancelled' ? `
+                        <button class="btn-order btn-reorder" onclick="reorder(${JSON.stringify(order.items).replace(/"/g, '&quot;')})">
+                            <i class="fas fa-redo"></i> Reorder
+                        </button>
+                        ` : ''}
+                    </div>
+                </div>
+            </div>
+        `;
+        
+        return card;
+    }
+    
+    // View order details
+    function viewOrderDetails(orderId) {
+        alert('Order Details:\n\nOrder ID: ' + orderId + '\n\nFull details feature coming soon!');
+        // পরবর্তীতে আলাদা অর্ডার ডিটেইলস পেজ তৈরি করা হবে
+    }
+    
+    // Reorder function
+    function reorder(items) {
+        if (!items || items.length === 0) {
+            alert('No items to reorder!');
+            return;
+        }
+        
+        // Get current cart
+        const currentCart = JSON.parse(localStorage.getItem('cart')) || [];
+        
+        // Add items to cart
+        items.forEach(item => {
+            const existingItem = currentCart.find(i => i.id === item.id);
+            if (existingItem) {
+                existingItem.quantity += (item.quantity || 1);
+            } else {
+                currentCart.push({
+                    id: item.id,
+                    name: item.name,
+                    price: item.price,
+                    img: item.img,
+                    quantity: item.quantity || 1
+                });
+            }
+        });
+        
+        // Save cart
+        localStorage.setItem('cart', JSON.stringify(currentCart));
+        
+        // Update cart count
+        if (typeof updateCartCount === 'function') {
+            updateCartCount();
+        }
+        
+        alert('✅ Items added to cart! Redirecting...');
+        window.location.href = 'cart.html';
+    }
+</script>
+<!-- ===== BOTTOM NAVIGATION (Daraz-Style) ===== -->
+<nav class="bottom-nav">
+    <a href="index.html" class="nav-item active">
+        <i class="fas fa-home"></i>
+        <span>Home</span>
+    </a>
+    <a href="#" class="nav-item" onclick="alert('Coming Soon!'); return false;">
+        <i class="fas fa-comment-alt"></i>
+        <span>Message</span>
+        <span class="nav-badge">3</span>
+    </a>
+    <a href="customer-login.html" class="nav-item" id="navAccount">
+        <i class="fas fa-user"></i>
+        <span>Account</span>
+    </a>
+    <a href="cart.html" class="nav-item">
+        <i class="fas fa-shopping-cart"></i>
+        <span>Cart</span>
+        <span class="nav-badge" id="bottomCartCount">0</span>
+    </a>
+</nav>
+</body>
+</html>

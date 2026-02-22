@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reseller Panel - LiponShop</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .reseller-wrapper {
+            min-height: 100vh;
+            padding: 20px;
+            background: #f4f4f4;
+        }
+        .reseller-box {
+            max-width: 800px;
+            margin: auto;
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+        }
+        .reseller-header {
+            text-align: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #007bff;
+        }
+        .reseller-header h2 {
+            margin: 0;
+            color: #333;
+        }
+        
+        .profit-card {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            margin-bottom: 25px;
+        }
+        .profit-card h3 {
+            margin: 0 0 10px;
+            font-size: 18px;
+            opacity: 0.9;
+        }
+        .profit-card .amount {
+            font-size: 32px;
+            font-weight: bold;
+            margin: 0;
+        }
+        .profit-card .note {
+            font-size: 12px;
+            opacity: 0.8;
+            margin-top: 5px;
+        }
+        
+        .reseller-info {
+            background: #e7f3ff;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .reseller-info span {
+            font-weight: 600;
+            color: #0056b3;
+        }
+        .copy-id {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 5px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+        .copy-id:hover {
+            background: #0056b3;
+        }
+        
+        .section-title {
+            margin: 20px 0 15px;
+            color: #333;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .products-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .products-table th {
+            background: #007bff;
+            color: white;
+            padding: 12px 15px;
+            text-align: left;
+            font-weight: 600;
+        }
+        .products-table td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #eee;
+            vertical-align: middle;
+        }
+        .products-table tr:hover {
+            background: #f8f9fa;
+        }
+        .product-img {
+            width: 50px;
+            height: 50px;
+            object-fit: cover;
+            border-radius: 5px;
+            background: #f4f4f4;
+        }
+        .product-name {
+            font-weight: 500;
+            color: #333;
+        }
+        .product-price {
+            color: #007bff;
+            font-weight: bold;
+        }
+        .commission-badge {
+            background: #28a745;
+            color: white;
+            padding: 3px 10px;
+            border-radius: 15px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        
+        .share-input-group {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+        .share-input {
+            flex: 1;
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 13px;
+            background: #f8f9fa;
+        }
+        .copy-btn {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            transition: 0.2s;
+        }
+        .copy-btn:hover {
+            background: #0056b3;
+        }
+        .copy-btn.copied {
+            background: #28a745;
+        }
+        
+        .how-it-works {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        .how-it-works h4 {
+            margin: 0 0 10px;
+            color: #856404;
+        }
+        .how-it-works ol {
+            margin: 0;
+            padding-left: 20px;
+            color: #856404;
+            font-size: 14px;
+        }
+        .how-it-works li {
+            margin: 5px 0;
+        }
+        
+        .dark .reseller-box,
+        .dark .products-table {
+            background: #1e293b;
+        }
+        .dark .reseller-header h2,
+        .dark .section-title,
+        .dark .product-name,
+        .dark .products-table td {
+            color: #fff;
+        }
+        .dark .reseller-info {
+            background: #334155;
+        }
+        .dark .reseller-info span {
+            color: #93c5fd;
+        }
+        .dark .products-table tr:hover {
+            background: #334155;
+        }
+        .dark .share-input {
+            background: #334155;
+            border-color: #475569;
+            color: white;
+        }
+        .dark .how-it-works {
+            background: #422006;
+            border-left-color: #f59e0b;
+        }
+        .dark .how-it-works h4,
+        .dark .how-it-works li {
+            color: #fcd34d;
+        }
+        
+        /* Mobile Responsive */
+        @media (max-width: 600px) {
+            .reseller-box {
+                padding: 15px;
+            }
+            .products-table {
+                font-size: 13px;
+            }
+            .products-table th,
+            .products-table td {
+                padding: 8px 10px;
+            }
+            .share-input-group {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .copy-btn {
+                width: 100%;
+                justify-content: center;
+            }
+            .reseller-info {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="reseller-wrapper">
+    <div class="reseller-box">
+        <div class="reseller-header">
+            <h2>🤝 LiponShop Reseller Panel</h2>
+            <p style="margin:5px 0 0; color:#666;">Share products & earn commission</p>
+        </div>
+
+        <div class="reseller-info">
+            <div>
+                <small>Your Reseller ID:</small><br>
+                <span id="resellerId">RES-XXXX</span>
+            </div>
+            <button class="copy-id" onclick="copyResellerId()">
+                <i class="fas fa-copy"></i> Copy ID
+            </button>
+        </div>
+
+        <div class="profit-card">
+            <h3>💰 Total Earned</h3>
+            <p class="amount">৳ <span id="resProfit">0</span></p>
+            <p class="note">Commission: 10% per sale • Withdraw at ৳500+</p>
+        </div>
+
+        <div class="how-it-works">
+            <h4>📚 How to Earn?</h4>
+            <ol>
+                <li>Copy your unique share link from below</li>
+                <li>Share on Facebook, WhatsApp, or Instagram</li>
+                <li>When someone buys via your link, you get 10% commission</li>
+                <li>Request withdrawal when balance reaches ৳500</li>
+            </ol>
+        </div>
+
+        <h3 class="section-title">📦 Shareable Products</h3>
+        <table class="products-table">
+            <thead>
+                <tr>
+                    <th>Product</th>
+                    <th>Price</th>
+                    <th>You Earn</th>
+                    <th>Share Link</th>
+                </tr>
+            </thead>
+            <tbody id="resellerProducts">
+            </tbody>
+        </table>
+
+      
+        <div style="text-align:center; margin-top:25px;">
+            <a href="index.html" style="color:#007bff; text-decoration:none;">
+                ← Back to Shop
+            </a>
+        </div>
+    </div>
+</div>
+
+<script>
+    const COMMISSION_RATE = 0.10;
+    const BASE_URL = "https://liponshop.com";
+    
+
+    function getResellerId() {
+        let id = localStorage.getItem("resellerId");
+        if (!id) {
+            id = "RES-" + Math.random().toString(36).substr(2, 6).toUpperCase();
+            localStorage.setItem("resellerId", id);
+            localStorage.setItem("resellerProfit", "0");
+        }
+        return id;
+    }
+    
+    document.addEventListener('DOMContentLoaded', () => {
+        
+        if (localStorage.getItem('darkMode') === 'on') {
+            document.body.classList.add('dark');
+        }
+        
+        
+        document.getElementById('resellerId').innerText = getResellerId();
+        
+       
+        loadProfit();
+        
+       
+        loadResellerProducts();
+    });
+    
+    function loadProfit() {
+        const profit = parseFloat(localStorage.getItem("resellerProfit")) || 0;
+        document.getElementById('resProfit').innerText = profit.toFixed(2);
+    }
+    
+    
+    function loadResellerProducts() {
+        const tbody = document.getElementById('resellerProducts');
+        const products = JSON.parse(localStorage.getItem('products')) || [];
+        const resellerId = getResellerId();
+        
+        if (products.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;">No products available</td></tr>';
+            return;
+        }
+        
+        tbody.innerHTML = '';
+        
+        products.forEach(product => {
+            const commission = (product.price * COMMISSION_RATE).toFixed(2);
+            
+            const shareLink = `${BASE_URL}/?ref=${resellerId}&pid=${product.id}`;
+            
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>
+                    <div style="display:flex;align-items:center;gap:10px;">
+                        <img src="${product.img}" class="product-img" onerror="this.src='https://via.placeholder.com/50?text=No+Img'">
+                        <span class="product-name">${product.name}</span>
+                    </div>
+                </td>
+                <td class="product-price">৳${product.price}</td>
+                <td><span class="commission-badge">৳${commission}</span></td>
+                <td>
+                    <div class="share-input-group">
+                        <input type="text" class="share-input" value="${shareLink}" id="link-${product.id}" readonly>
+                        <button class="copy-btn" onclick="copyLink('${product.id}')">
+                            <i class="fas fa-copy"></i> Copy
+                        </button>
+                    </div>
+                </td>
+            `;
+            tbody.appendChild(row);
+        });
+    }
+    
+    
+    function copyLink(productId) {
+        const input = document.getElementById(`link-${productId}`);
+        const btn = input.closest('.copy-btn');
+        const originalText = btn.innerHTML;
+        
+       
+        input.select();
+        input.setSelectionRange(0, 99999);
+        navigator.clipboard.writeText(input.value).then(() => {
+        
+            btn.innerHTML = '<i class="fas fa-check"></i> Copied!';
+            btn.classList.add('copied');
+            
+         
+            setTimeout(() => {
+                btn.innerHTML = originalText;
+                btn.classList.remove('copied');
+            }, 2000);
+        }).catch(err => {
+            console.error('Copy failed:', err);
+            alert('Failed to copy link. Please copy manually.');
+        });
+    }
+    
+   
+    function copyResellerId() {
+        const id = document.getElementById('resellerId').innerText;
+        navigator.clipboard.writeText(id).then(() => {
+            alert('Reseller ID copied: ' + id);
+        });
+    }
+    
+    function addCommission(resellerId, amount, orderId) {
+        const currentProfit = parseFloat(localStorage.getItem("resellerProfit")) || 0;
+        const newProfit = currentProfit + amount;
+        localStorage.setItem("resellerProfit", newProfit.toFixed(2));
+        
+        
+        const logs = JSON.parse(localStorage.getItem("commissionLogs")) || [];
+        logs.push({
+            resellerId,
+            amount,
+            orderId,
+            date: new Date().toISOString()
+        });
+        localStorage.setItem("commissionLogs", JSON.stringify(logs));
+        
+        loadProfit();
+    }
+</script>
+
+</body>
+</html>

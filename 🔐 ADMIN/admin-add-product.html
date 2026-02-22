@@ -1,0 +1,859 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Product - LiponShop Admin</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        :root {
+            --primary: #4f46e5;
+            --primary-dark: #4338ca;
+            --secondary: #f59e0b;
+            --success: #10b981;
+            --danger: #ef4444;
+            --dark: #1f2937;
+            --light: #f9fafb;
+            --gray: #6b7280;
+            --border: #e5e7eb;
+        }
+
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .add-product-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            animation: slideUp 0.5s ease;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .page-header {
+            background: white;
+            padding: 25px 30px;
+            border-radius: 16px;
+            margin-bottom: 25px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .page-title {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .page-title i {
+            font-size: 32px;
+            color: var(--primary);
+        }
+
+        .page-title h1 {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--dark);
+        }
+
+        .back-btn {
+            background: var(--light);
+            color: var(--primary);
+            padding: 12px 25px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: 0.3s;
+        }
+
+        .back-btn:hover {
+            background: var(--primary);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .form-card {
+            background: white;
+            border-radius: 16px;
+            padding: 35px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+        }
+
+        .form-section-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--dark);
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--light);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .form-section-title i {
+            color: var(--primary);
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+
+        .form-group label {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--dark);
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .form-group label .required {
+            color: var(--danger);
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            padding: 12px 15px;
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            font-size: 14px;
+            transition: all 0.3s;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            border-color: var(--primary);
+            outline: none;
+            box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.1);
+        }
+
+        .form-group textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .form-hint {
+            font-size: 12px;
+            color: var(--gray);
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        /* Modern Image Upload */
+        .image-upload-wrapper {
+            position: relative;
+        }
+
+        .image-upload-area {
+            border: 3px dashed var(--border);
+            border-radius: 12px;
+            padding: 40px;
+            text-align: center;
+            background: linear-gradient(135deg, #f9fafb 0%, #f3f4f6 100%);
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .image-upload-area:hover,
+        .image-upload-area.dragover {
+            border-color: var(--primary);
+            background: linear-gradient(135deg, #eef2ff 0%, #e0e7ff 100%);
+            transform: translateY(-2px);
+        }
+
+        .image-upload-area.has-image {
+            border-color: var(--success);
+            border-style: solid;
+            background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
+        }
+
+        .upload-icon-wrapper {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 20px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .upload-icon-wrapper i {
+            font-size: 36px;
+            color: var(--primary);
+        }
+
+        .image-upload-area.has-image .upload-icon-wrapper i {
+            color: var(--success);
+        }
+
+        .upload-text h3 {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--dark);
+            margin-bottom: 8px;
+        }
+
+        .upload-text p {
+            color: var(--gray);
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+
+        .upload-buttons {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .upload-btn {
+            background: var(--primary);
+            color: white;
+            padding: 12px 28px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s;
+            border: none;
+            font-size: 14px;
+        }
+
+        .upload-btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(79, 70, 229, 0.3);
+        }
+
+        .upload-btn.secondary {
+            background: white;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+        }
+
+        .upload-btn.secondary:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        .file-input {
+            display: none;
+        }
+
+        .image-preview-container {
+            margin-top: 25px;
+            display: none;
+        }
+
+        .image-preview-container.show {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .image-preview-wrapper {
+            position: relative;
+            display: inline-block;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+        }
+
+        .image-preview {
+            max-width: 100%;
+            max-height: 350px;
+            display: block;
+            border-radius: 12px;
+        }
+
+        .image-info {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+            color: white;
+            padding: 15px;
+            font-size: 13px;
+        }
+
+        .remove-image-btn {
+            background: var(--danger);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 15px;
+            transition: all 0.3s;
+        }
+
+        .remove-image-btn:hover {
+            background: #dc2626;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(239, 68, 68, 0.3);
+        }
+
+        .submit-section {
+            margin-top: 35px;
+            padding-top: 30px;
+            border-top: 2px solid var(--light);
+        }
+
+        .submit-btn {
+            width: 100%;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            border: none;
+            padding: 16px;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            transition: all 0.3s;
+            box-shadow: 0 8px 24px rgba(79, 70, 229, 0.3);
+        }
+
+        .submit-btn:hover:not(:disabled) {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 32px rgba(79, 70, 229, 0.4);
+        }
+
+        .submit-btn:active:not(:disabled) {
+            transform: translateY(-1px);
+        }
+
+        .submit-btn:disabled {
+            background: linear-gradient(135deg, #9ca3af 0%, #6b7280 100%);
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
+        .success-alert {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            padding: 18px 25px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            display: none;
+            align-items: center;
+            gap: 12px;
+            font-weight: 600;
+            animation: slideIn 0.4s ease;
+            box-shadow: 0 8px 24px rgba(16, 185, 129, 0.3);
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .success-alert.show {
+            display: flex;
+        }
+
+        .success-alert i {
+            font-size: 24px;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            
+            .form-card {
+                padding: 25px;
+            }
+            
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .page-header {
+                flex-direction: column;
+                gap: 20px;
+                text-align: center;
+            }
+            
+            .page-title h1 {
+                font-size: 22px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="add-product-container">
+    <!-- Page Header -->
+    <div class="page-header">
+        <div class="page-title">
+            <i class="fas fa-plus-circle"></i>
+            <h1>Add New Product</h1>
+        </div>
+        <a href="admin-dashboard.html" class="back-btn">
+            <i class="fas fa-arrow-left"></i>
+            <span>Back to Dashboard</span>
+        </a>
+    </div>
+
+    <!-- Form Card -->
+    <div class="form-card">
+        <div class="success-alert" id="successAlert">
+            <i class="fas fa-check-circle"></i>
+            <span>Product added successfully to your store!</span>
+        </div>
+
+        <form id="addProductForm">
+            <!-- Basic Information -->
+            <div class="form-section-title">
+                <i class="fas fa-info-circle"></i>
+                Basic Information
+            </div>
+            
+            <div class="form-grid">
+                <div class="form-group full-width">
+                    <label>
+                        Product Name
+                        <span class="required">*</span>
+                    </label>
+                    <input type="text" id="pName" placeholder="e.g. Premium Sunglass, Smart Watch" required>
+                </div>
+
+                <div class="form-group">
+                    <label>
+                        Price (৳)
+                        <span class="required">*</span>
+                    </label>
+                    <input type="number" id="pPrice" placeholder="399" min="0" step="0.01" required>
+                </div>
+
+                <div class="form-group">
+                    <label>
+                        Stock Quantity
+                        <span class="required">*</span>
+                    </label>
+                    <input type="number" id="pStock" placeholder="50" min="0" value="10" required>
+                </div>
+
+                <div class="form-group">
+                    <label>
+                        Category
+                        <span class="required">*</span>
+                    </label>
+                    <select id="pCategory" required onchange="handleCategoryChange()">
+                        <option value="">Select Category</option>
+                        <option value="Sunglass">🕶️ Sunglass</option>
+                        <option value="Watch">⌚ Watch</option>
+                        <option value="Electronics">🔌 Electronics</option>
+                        <option value="Home">🏠 Home & Living</option>
+                        <option value="Frame">🖼️ Frame</option>
+                        <optgroup label="🌶️ Spices - মশলা">
+                            <option value="হলুদ">হলুদ (Turmeric)</option>
+                            <option value="জিরা বীজ">জিরা বীজ (Cumin Seeds)</option>
+                            <option value="ধনিয়া গুঁড়া">ধনিয়া গুঁড়া/বীজ (Coriander)</option>
+                            <option value="গোলমরিচ">গোলমরিচ/কালি মির্চ (Black Pepper)</option>
+                            <option value="এলাচ সবুজ">এলাচ সবুজ (Green Cardamom)</option>
+                            <option value="এলাচ কালো">এলাচ কালো (Black Cardamom)</option>
+                            <option value="দারুচিনি">দারুচিনি/ডালচিনি (Cinnamon)</option>
+                            <option value="লবঙ্গ">লবঙ্গ/লাউং (Cloves)</option>
+                            <option value="মেথি বীজ">মেথি বীজ/দানা (Fenugreek)</option>
+                            <option value="মৌরি বীজ">মৌরি বীজ/সাউনফ (Fennel Seeds)</option>
+                            <option value="সরিষা বীজ">সরিষা বীজ/রাই (Mustard Seeds)</option>
+                            <option value="হিং">হিং (Asafoetida)</option>
+                            <option value="লাল মরিচ">লাল মরিচ গুঁড়ো (Red Chili Powder)</option>
+                            <option value="তেজপাতা">তেজপাতা (Bay Leaves)</option>
+                            <option value="জায়ফল">জায়ফল/জয়ফল (Nutmeg)</option>
+                            <option value="গদা">গদা/জাবিত্রী (Mace)</option>
+                            <option value="ক্যারাম বীজ">ক্যারাম বীজ/জোয়ান (Carom Seeds)</option>
+                            <option value="স্টার অ্যানিস">স্টার অ্যানিস/বাদিয়ান (Star Anise)</option>
+                            <option value="আমচুর">শুকনো আমের গুঁড়ো/আমচুর (Dry Mango Powder)</option>
+                            <option value="ডালিমের বীজ">ডালিমের বীজ/অনার্দন (Pomegranate Seeds)</option>
+                            <option value="কাসুরি মেথি">শুকনো মেথি পাতা/কাসুরি মেথি (Dried Fenugreek)</option>
+                            <option value="রসুন">রসুন/লেহসুন (Garlic)</option>
+                            <option value="আদা">আদা/আদ্রাক (Ginger)</option>
+                            <option value="পোস্ত বীজ">পোস্ত বীজ/খাশখাশ (Poppy Seeds)</option>
+                            <option value="শাহী জিরা">ক্যারাওয়ে বীজ/শাহী জিরা (Caraway Seeds)</option>
+                        </optgroup>
+                        <optgroup label="🥘 Spice Blends - মশলা মিশ্রণ">
+                            <option value="গরম মশলা">গরম মশলা (Garam Masala)</option>
+                            <option value="কারি পাউডার">কারি পাউডার (Curry Powder)</option>
+                            <option value="চাট মশলা">চাট মশলা (Chaat Masala)</option>
+                            <option value="তন্দুরি মশলা">তন্দুরি মশলা (Tandoori Masala)</option>
+                        </optgroup>
+                        <option value="Other">📦 Other</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Sub-Category</label>
+                    <input type="text" id="pSubCategory" placeholder="e.g. Wall Clock, Digital Watch">
+                    <span class="form-hint">
+                        <i class="fas fa-info-circle"></i>
+                        Optional - For more specific classification
+                    </span>
+                </div>
+            </div>
+
+            <!-- Product Image -->
+            <div class="form-section-title">
+                <i class="fas fa-image"></i>
+                Product Image
+            </div>
+
+            <div class="form-group full-width">
+                <div class="image-upload-wrapper">
+                    <div class="image-upload-area" id="uploadArea" onclick="document.getElementById('pImageFile').click()">
+                        <div class="upload-icon-wrapper">
+                            <i class="fas fa-cloud-upload-alt" id="uploadIcon"></i>
+                        </div>
+                        <div class="upload-text">
+                            <h3>Drop your image here or click to browse</h3>
+                            <p>Supports: JPG, PNG, WEBP (Max 5MB)</p>
+                        </div>
+                        <div class="upload-buttons">
+                            <label class="upload-btn" for="pImageFile">
+                                <i class="fas fa-upload"></i>
+                                Choose Image
+                            </label>
+                            <button type="button" class="upload-btn secondary" onclick="event.stopPropagation(); document.getElementById('pImageFile').click()">
+                                <i class="fas fa-folder-open"></i>
+                                Browse Files
+                            </button>
+                        </div>
+                        <input type="file" id="pImageFile" class="file-input" accept="image/*" onchange="handleImageUpload(event)">
+                    </div>
+
+                    <div class="image-preview-container" id="previewContainer">
+                        <div class="image-preview-wrapper">
+                            <img id="imagePreview" class="image-preview" alt="Product Preview">
+                            <div class="image-info" id="imageInfo"></div>
+                        </div>
+                        <br>
+                        <button type="button" class="remove-image-btn" onclick="removeImage()">
+                            <i class="fas fa-trash-alt"></i>
+                            Remove Image
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Description -->
+            <div class="form-section-title">
+                <i class="fas fa-align-left"></i>
+                Description
+            </div>
+
+            <div class="form-group full-width">
+                <textarea id="pDescription" placeholder="Write a detailed description about the product... Include features, specifications, and benefits."></textarea>
+                <span class="form-hint">
+                    <i class="fas fa-lightbulb"></i>
+                    Tip: Good descriptions help customers make informed decisions
+                </span>
+            </div>
+
+            <!-- Submit Button -->
+            <div class="submit-section">
+                <button type="submit" class="submit-btn" id="submitBtn">
+                    <i class="fas fa-plus-circle"></i>
+                    <span>Add Product to Store</span>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    let uploadedImageBase64 = null;
+    let uploadedFileName = '';
+    let uploadedFileSize = '';
+
+    // ==============================
+    // IMAGE UPLOAD FUNCTIONS
+    // ==============================
+
+    function handleImageUpload(event) {
+        const file = event.target.files[0];
+        
+        if (!file) return;
+        
+        // Validate file size (max 5MB)
+        if (file.size > 5 * 1024 * 1024) {
+            alert('❌ File size should be less than 5MB! Please choose a smaller image.');
+            return;
+        }
+        
+        // Validate file type
+        if (!file.type.match('image.*')) {
+            alert('❌ Please select a valid image file (JPG, PNG, or WEBP)!');
+            return;
+        }
+
+        uploadedFileName = file.name;
+        uploadedFileSize = (file.size / 1024).toFixed(2) + ' KB';
+        
+        const reader = new FileReader();
+        
+        reader.onload = function(e) {
+            uploadedImageBase64 = e.target.result;
+            
+            // Show preview
+            const preview = document.getElementById('imagePreview');
+            const previewContainer = document.getElementById('previewContainer');
+            const uploadArea = document.getElementById('uploadArea');
+            const imageInfo = document.getElementById('imageInfo');
+            
+            preview.src = uploadedImageBase64;
+            previewContainer.classList.add('show');
+            
+            // Update image info
+            imageInfo.innerHTML = `
+                <strong>${uploadedFileName}</strong><br>
+                <small>${uploadedFileSize}</small>
+            `;
+            
+            // Update upload area
+            uploadArea.classList.add('has-image');
+            document.getElementById('uploadIcon').className = 'fas fa-check-circle';
+        };
+        
+        reader.readAsDataURL(file);
+    }
+
+    function removeImage() {
+        uploadedImageBase64 = null;
+        uploadedFileName = '';
+        uploadedFileSize = '';
+        
+        // Reset file input
+        document.getElementById('pImageFile').value = '';
+        
+        // Hide preview
+        document.getElementById('previewContainer').classList.remove('show');
+        
+        // Reset upload area
+        const uploadArea = document.getElementById('uploadArea');
+        uploadArea.classList.remove('has-image');
+        document.getElementById('uploadIcon').className = 'fas fa-cloud-upload-alt';
+    }
+
+    function handleCategoryChange() {
+        const category = document.getElementById('pCategory').value;
+        const subCategoryInput = document.getElementById('pSubCategory');
+        
+        // Auto-suggest sub-categories based on main category
+        const suggestions = {
+            'Watch': 'Digital Watch, Analog Watch, Smart Watch, Wall Clock',
+            'Electronics': 'Mobile, Laptop, Headphone, Charger',
+            'Frame': 'Photo Frame, Wall Frame, Digital Frame',
+            'Home': 'Decoration, Furniture, Kitchen'
+        };
+        
+        if (suggestions[category]) {
+            subCategoryInput.placeholder = suggestions[category];
+        } else {
+            subCategoryInput.placeholder = 'e.g. Wall Clock, Digital Watch';
+        }
+    }
+
+    // Drag and drop functionality
+    const uploadArea = document.getElementById('uploadArea');
+    
+    uploadArea.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        uploadArea.classList.add('dragover');
+    });
+    
+    uploadArea.addEventListener('dragleave', () => {
+        uploadArea.classList.remove('dragover');
+    });
+    
+    uploadArea.addEventListener('drop', (e) => {
+        e.preventDefault();
+        uploadArea.classList.remove('dragover');
+        
+        const files = e.dataTransfer.files;
+        if (files.length > 0) {
+            document.getElementById('pImageFile').files = files;
+            handleImageUpload({ target: { files: files } });
+        }
+    });
+
+    // ==============================
+    // FORM SUBMIT
+    // ==============================
+
+    document.addEventListener('DOMContentLoaded', () => {
+        // Admin Login Check
+        if (localStorage.getItem('adminLogin') !== 'true') {
+            window.location.href = 'admin-login.html';
+            return;
+        }
+
+        // Form Submit Handler
+        document.getElementById('addProductForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Validate image
+            if (!uploadedImageBase64) {
+                alert('❌ Please upload a product image!');
+                document.getElementById('uploadArea').scrollIntoView({ behavior: 'smooth', block: 'center' });
+                document.getElementById('uploadArea').style.animation = 'shake 0.5s';
+                setTimeout(() => {
+                    document.getElementById('uploadArea').style.animation = '';
+                }, 500);
+                return;
+            }
+            
+            const btn = document.getElementById('submitBtn');
+            const successAlert = document.getElementById('successAlert');
+            const originalBtnContent = btn.innerHTML;
+            
+            // Loading state
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i><span>Adding Product...</span>';
+            successAlert.classList.remove('show');
+            
+            setTimeout(() => {
+                try {
+                    // Get form values
+                    const productData = {
+                        id: Date.now(),
+                        name: document.getElementById('pName').value.trim(),
+                        price: parseFloat(document.getElementById('pPrice').value),
+                        category: document.getElementById('pCategory').value,
+                        subCategory: document.getElementById('pSubCategory').value.trim(),
+                        stock: parseInt(document.getElementById('pStock').value),
+                        img: uploadedImageBase64,
+                        description: document.getElementById('pDescription').value.trim() || 'No description available',
+                        dateAdded: new Date().toISOString()
+                    };
+                    
+                    // Get existing products
+                    const products = JSON.parse(localStorage.getItem('products')) || [];
+                    
+                    // Add new product
+                    products.push(productData);
+                    
+                    // Save to localStorage
+                    localStorage.setItem('products', JSON.stringify(products));
+                    
+                    // Show success
+                    successAlert.classList.add('show');
+                    btn.innerHTML = '<i class="fas fa-check-circle"></i><span>Product Added Successfully!</span>';
+                    btn.style.background = 'linear-gradient(135deg, #10b981 0%, #059669 100%)';
+                    
+                    // Scroll to top
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                    
+                    // Reset form after 2 seconds
+                    setTimeout(() => {
+                        document.getElementById('addProductForm').reset();
+                        removeImage();
+                        btn.disabled = false;
+                        btn.innerHTML = originalBtnContent;
+                        btn.style.background = '';
+                        successAlert.classList.remove('show');
+                    }, 2500);
+                    
+                    // Show browser notification
+                    if ('Notification' in window && Notification.permission === 'granted') {
+                        new Notification('Product Added!', {
+                            body: `${productData.name} has been added to your store.`,
+                            icon: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y=".9em" font-size="90">✅</text></svg>'
+                        });
+                    }
+                    
+                } catch (error) {
+                    console.error('Error adding product:', error);
+                    alert('❌ Error adding product. Please try again.');
+                    btn.disabled = false;
+                    btn.innerHTML = originalBtnContent;
+                }
+                
+            }, 800);
+        });
+        
+        // Request notification permission
+        if ('Notification' in window && Notification.permission === 'default') {
+            Notification.requestPermission();
+        }
+    });
+
+    // Add shake animation
+    const style = document.createElement('style');
+    style.textContent = `
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+    `;
+    document.head.appendChild(style);
+</script>
+
+</body>
+</html>

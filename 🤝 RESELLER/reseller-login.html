@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reseller Login - LiponShop</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+--primary: #10b981;
+--primary-dark: #059669;
+--danger: #ef4444;
+--success: #10b981;
+--dark: #1f2937;
+--white: #ffffff;
+--gray: #6b7280;
+--border: #e5e7eb;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+body {
+background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+min-height: 100vh;
+display: flex;
+align-items: center;
+justify-content: center;
+padding: 20px;
+}
+.login-container {
+background: var(--white);
+padding: 40px;
+border-radius: 16px;
+box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+max-width: 450px;
+width: 100%;
+}
+.login-header {
+text-align: center;
+margin-bottom: 30px;
+}
+.login-header i {
+font-size: 48px;
+color: var(--primary);
+margin-bottom: 15px;
+}
+.login-header h1 {
+font-size: 28px;
+color: var(--dark);
+margin-bottom: 5px;
+}
+.login-header p {
+color: var(--gray);
+font-size: 14px;
+}
+.form-group {
+margin-bottom: 20px;
+}
+.form-group label {
+display: block;
+margin-bottom: 8px;
+font-weight: 500;
+color: var(--dark);
+}
+.form-group input {
+width: 100%;
+padding: 12px 15px;
+border: 2px solid var(--border);
+border-radius: 10px;
+font-size: 14px;
+transition: all 0.3s;
+}
+.form-group input:focus {
+border-color: var(--primary);
+outline: none;
+box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.1);
+}
+.btn-login {
+width: 100%;
+padding: 14px;
+background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+color: var(--white);
+border: none;
+border-radius: 10px;
+font-size: 16px;
+font-weight: 600;
+cursor: pointer;
+transition: all 0.3s;
+}
+.btn-login:hover {
+transform: translateY(-2px);
+box-shadow: 0 10px 25px rgba(16, 185, 129, 0.3);
+}
+.divider {
+text-align: center;
+margin: 20px 0;
+color: var(--gray);
+font-size: 14px;
+}
+.btn-signup {
+width: 100%;
+padding: 14px;
+background: var(--white);
+color: var(--primary);
+border: 2px solid var(--primary);
+border-radius: 10px;
+font-size: 16px;
+font-weight: 600;
+cursor: pointer;
+transition: all 0.3s;
+}
+.btn-signup:hover {
+background: var(--primary);
+color: var(--white);
+}
+.back-link {
+display: block;
+text-align: center;
+margin-top: 20px;
+color: var(--gray);
+text-decoration: none;
+font-size: 14px;
+}
+.back-link:hover { color: var(--primary); }
+.alert {
+padding: 12px 15px;
+border-radius: 8px;
+margin-bottom: 20px;
+display: none;
+}
+.alert-error {
+background: #fee2e2;
+color: #991b1b;
+border: 1px solid var(--danger);
+}
+.alert-error.show { display: block; }
+.forgot-link {
+display: block;
+text-align: right;
+margin-top: -10px;
+margin-bottom: 20px;
+color: var(--primary);
+text-decoration: none;
+font-size: 13px;
+}
+.forgot-link:hover { text-decoration: underline; }
+</style>
+</head>
+<body>
+<div class="login-container">
+<div class="login-header">
+<i class="fas fa-handshake"></i>
+<h1>Reseller Login</h1>
+<p>Access your reseller dashboard</p>
+</div>
+
+<div class="alert alert-error" id="alertError"></div>
+
+<form id="resellerLoginForm">
+<div class="form-group">
+<label><i class="fas fa-user"></i> Username</label>
+<input type="text" id="resellerUsername" placeholder="Enter username" required>
+</div>
+
+<div class="form-group">
+<label><i class="fas fa-lock"></i> Password</label>
+<input type="password" id="resellerPassword" placeholder="Enter password" required>
+</div>
+
+<a href="reseller-forgot-password.html" class="forgot-link">Forgot Password?</a>
+
+<button type="submit" class="btn-login">
+<i class="fas fa-sign-in-alt"></i> Login to Reseller Panel
+</button>
+</form>
+
+<div class="divider">or</div>
+
+<button class="btn-signup" onclick="window.location.href='reseller-signup.html'">
+<i class="fas fa-user-plus"></i> Become a Reseller
+</button>
+
+<a href="index.html" class="back-link">
+<i class="fas fa-arrow-left"></i> Back to Shop
+</a>
+</div>
+
+<script>
+document.getElementById('resellerLoginForm').addEventListener('submit', function(e) {
+e.preventDefault();
+
+const username = document.getElementById('resellerUsername').value;
+const password = document.getElementById('resellerPassword').value;
+const alertError = document.getElementById('alertError');
+
+const resellerData = JSON.parse(localStorage.getItem('resellerData')) || {};
+
+if (resellerData.username === username && resellerData.password === password) {
+localStorage.setItem('resellerLogin', 'true');
+localStorage.setItem('resellerUsername', username);
+alert('✅ Reseller login successful!');
+window.location.href = 'reseller-dashboard.html';
+} else {
+alertError.textContent = '❌ Invalid username or password!';
+alertError.classList.add('show');
+}
+});
+</script>
+</body>
+</html>

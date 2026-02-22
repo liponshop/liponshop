@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Customer Signup - LiponShop</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+--primary: #4f46e5;
+--primary-dark: #4338ca;
+--success: #10b981;
+--danger: #ef4444;
+--dark: #1f2937;
+--light: #f9fafb;
+--white: #ffffff;
+--gray: #6b7280;
+--border: #e5e7eb;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+body {
+background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+min-height: 100vh;
+display: flex;
+align-items: center;
+justify-content: center;
+padding: 20px;
+}
+.signup-container {
+background: var(--white);
+padding: 40px;
+border-radius: 16px;
+box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+max-width: 500px;
+width: 100%;
+}
+.signup-header {
+text-align: center;
+margin-bottom: 30px;
+}
+.signup-header i {
+font-size: 48px;
+color: var(--primary);
+margin-bottom: 15px;
+}
+.signup-header h1 {
+font-size: 28px;
+color: var(--dark);
+margin-bottom: 5px;
+}
+.signup-header p {
+color: var(--gray);
+font-size: 14px;
+}
+.form-group {
+margin-bottom: 20px;
+}
+.form-group label {
+display: block;
+margin-bottom: 8px;
+font-weight: 500;
+color: var(--dark);
+}
+.form-group input {
+width: 100%;
+padding: 12px 15px;
+border: 2px solid var(--border);
+border-radius: 10px;
+font-size: 14px;
+transition: all 0.3s;
+}
+.form-group input:focus {
+border-color: var(--primary);
+outline: none;
+box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.1);
+}
+.btn-signup {
+width: 100%;
+padding: 14px;
+background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+color: var(--white);
+border: none;
+border-radius: 10px;
+font-size: 16px;
+font-weight: 600;
+cursor: pointer;
+transition: all 0.3s;
+}
+.btn-signup:hover {
+transform: translateY(-2px);
+box-shadow: 0 10px 25px rgba(79, 70, 229, 0.3);
+}
+.back-link {
+display: block;
+text-align: center;
+margin-top: 20px;
+color: var(--gray);
+text-decoration: none;
+font-size: 14px;
+}
+.back-link:hover { color: var(--primary); }
+.alert {
+padding: 12px 15px;
+border-radius: 8px;
+margin-bottom: 20px;
+display: none;
+}
+.alert-error {
+background: #fee2e2;
+color: #991b1b;
+border: 1px solid var(--danger);
+}
+.alert-success {
+background: #d1fae5;
+color: #065f46;
+border: 1px solid var(--success);
+}
+.alert.show { display: block; }
+.password-strength {
+margin-top: 8px;
+font-size: 12px;
+}
+.strength-bar {
+height: 4px;
+background: var(--border);
+border-radius: 2px;
+margin-top: 5px;
+overflow: hidden;
+}
+.strength-fill {
+height: 100%;
+width: 0%;
+transition: all 0.3s;
+}
+</style>
+</head>
+<body>
+<div class="signup-container">
+<div class="signup-header">
+<i class="fas fa-user-plus"></i>
+<h1>Create Account</h1>
+<p>Join LiponShop for exclusive deals</p>
+</div>
+
+<div class="alert alert-error" id="alertError"></div>
+<div class="alert alert-success" id="alertSuccess"></div>
+
+<form id="customerSignupForm">
+<div class="form-group">
+<label><i class="fas fa-user"></i> Full Name</label>
+<input type="text" id="signupName" placeholder="Enter your full name" required>
+</div>
+
+<div class="form-group">
+<label><i class="fas fa-envelope"></i> Email Address</label>
+<input type="email" id="signupEmail" placeholder="your@email.com" required>
+</div>
+
+<div class="form-group">
+<label><i class="fas fa-mobile-alt"></i> Phone Number</label>
+<input type="tel" id="signupPhone" placeholder="017XXXXXXXX" pattern="01[3-9][0-9]{8}" required>
+</div>
+
+<div class="form-group">
+<label><i class="fas fa-lock"></i> Password</label>
+<input type="password" id="signupPassword" placeholder="Minimum 6 characters" minlength="6" required oninput="checkPasswordStrength()">
+<div class="password-strength">
+<div class="strength-bar">
+<div class="strength-fill" id="strengthFill"></div>
+</div>
+<span id="strengthText"></span>
+</div>
+</div>
+
+<div class="form-group">
+<label><i class="fas fa-lock"></i> Confirm Password</label>
+<input type="password" id="signupConfirmPassword" placeholder="Confirm password" required>
+</div>
+
+<button type="submit" class="btn-signup">
+<i class="fas fa-user-plus"></i> Create Account
+</button>
+</form>
+
+<a href="customer-login.html" class="back-link">
+<i class="fas fa-arrow-left"></i> Already have an account? Login
+</a>
+</div>
+
+<script>
+// Password Strength Checker
+function checkPasswordStrength() {
+const password = document.getElementById('signupPassword').value;
+const strengthFill = document.getElementById('strengthFill');
+const strengthText = document.getElementById('strengthText');
+
+let strength = 0;
+if (password.length >= 6) strength++;
+if (password.length >= 8) strength++;
+if (/[A-Z]/.test(password)) strength++;
+if (/[0-9]/.test(password)) strength++;
+if (/[^A-Za-z0-9]/.test(password)) strength++;
+
+const colors = ['#ef4444', '#f97316', '#fbbf24', '#84cc16', '#10b981'];
+const texts = ['Very Weak', 'Weak', 'Fair', 'Good', 'Strong'];
+
+strengthFill.style.width = (strength * 20) + '%';
+strengthFill.style.background = colors[strength - 1] || colors[0];
+strengthText.textContent = texts[strength - 1] || '';
+strengthText.style.color = colors[strength - 1] || colors[0];
+}
+
+// Form Submit
+document.getElementById('customerSignupForm').addEventListener('submit', function(e) {
+e.preventDefault();
+
+const name = document.getElementById('signupName').value.trim();
+const email = document.getElementById('signupEmail').value.trim();
+const phone = document.getElementById('signupPhone').value.trim();
+const password = document.getElementById('signupPassword').value;
+const confirmPassword = document.getElementById('signupConfirmPassword').value;
+const alertError = document.getElementById('alertError');
+const alertSuccess = document.getElementById('alertSuccess');
+
+// Validate passwords match
+if (password !== confirmPassword) {
+alertError.textContent = '❌ Passwords do not match!';
+alertError.classList.add('show');
+return;
+}
+
+// Check if account already exists
+const existingData = JSON.parse(localStorage.getItem('customerData')) || {};
+if (existingData.email === email || existingData.phone === phone) {
+alertError.textContent = '❌ Account already exists with this email/phone!';
+alertError.classList.add('show');
+return;
+}
+
+// Save customer data
+const customerData = {
+name: name,
+email: email,
+phone: phone,
+password: password,
+joinedDate: new Date().toISOString()
+};
+
+localStorage.setItem('customerData', JSON.stringify(customerData));
+
+alertSuccess.textContent = '✅ Account created successfully! Redirecting to login...';
+alertSuccess.classList.add('show');
+
+setTimeout(() => {
+window.location.href = 'customer-login.html';
+}, 2000);
+});
+</script>
+</body>
+</html>
