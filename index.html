@@ -1,11 +1,17 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="bn">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>LiponShop - Best Online Shopping in Bangladesh</title>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Hind+Siliguri:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LiponShop - Best Online Shopping in Bangladesh</title>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/csscomponents.css">
 <style>
 :root {
 --primary: #4f46e5;
@@ -60,6 +66,7 @@ display: flex;
 align-items: center;
 gap: 8px;
 }
+
 .header-menu {
 display: flex;
 align-items: center;
@@ -107,6 +114,20 @@ transition: 0.3s;
 background: var(--light);
 color: var(--primary);
 }
+.wishlist-icon-header {
+position: relative;
+font-size: 20px;
+color: var(--dark);
+padding: 8px;
+border-radius: 8px;
+transition: 0.3s;
+margin-left: 5px;
+}
+.wishlist-icon-header:hover {
+background: var(--light);
+color: var(--danger);
+}
+
 
 /* Side Menu */
 .side-menu {
@@ -293,6 +314,7 @@ border-radius: 16px;
 overflow: hidden;
 box-shadow: 0 2px 12px rgba(0,0,0,0.06);
 transition: all 0.3s;
+position: relative;
 }
 .product-card:hover {
 transform: translateY(-8px);
@@ -348,6 +370,28 @@ background: var(--primary-dark);
 transform: translateY(-2px);
 }
 
+/* Wishlist Button */
+.wishlist-btn {
+position: absolute;
+top: 10px;
+right: 10px;
+background: white;
+border: none;
+width: 35px;
+height: 35px;
+border-radius: 50%;
+cursor: pointer;
+box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+color: #ccc;
+transition: 0.3s;
+z-index: 10;
+display: flex;
+align-items: center;
+justify-content: center;
+}
+.wishlist-btn.active { color: #ef4444; }
+.wishlist-btn:hover { transform: scale(1.1); }
+
 /* Features */
 .features-section {
 background: var(--white);
@@ -395,7 +439,7 @@ color: white;
 margin-bottom: 20px;
 font-size: 18px;
 }
-.footer-col ul li { margin-bottom: 12px; }
+.footer-col ul li { margin-bottom: 12px; list-style: none; }
 .footer-col ul li a:hover {
 color: var(--secondary);
 padding-left: 5px;
@@ -480,6 +524,36 @@ min-width: 18px;
 text-align: center;
 }
 
+/* Modal */
+.modal {
+display: none;
+position: fixed;
+top: 0;
+left: 0;
+width: 100%;
+height: 100%;
+background: rgba(0,0,0,0.5);
+z-index: 2000;
+align-items: center;
+justify-content: center;
+}
+.modal.show { display: flex; }
+.modal-content {
+background: white;
+padding: 20px;
+border-radius: 10px;
+max-width: 500px;
+width: 90%;
+position: relative;
+}
+.modal-content .close {
+position: absolute;
+top: 10px;
+right: 20px;
+font-size: 28px;
+cursor: pointer;
+}
+
 /* Responsive */
 @media (max-width: 768px) {
 .account-btn span { display: none; }
@@ -503,13 +577,20 @@ body { padding-bottom: 0; }
 
 <!-- ===== COMMON HEADER ===== -->
 <div class="common-header">
-<div class="header-content">
+<div class="header-content">   
 <button class="menu-btn" onclick="toggleMenu()">
 <i class="fas fa-bars"></i>
 </button>
 <a href="index.html" class="logo">
 <i class="fas fa-shopping-bag"></i> LiponShop
 </a>
+<!-- Search Box HTML -->
+<div class="search-box">
+    <input type="text" id="searchInput" placeholder="প্রোডাক্ট খুঁজুন...">
+    <button type="button" id="searchBtn" onclick="searchProduct()">
+        <i class="fas fa-search"></i>
+    </button>
+</div>
 <div class="header-menu">
 <a href="customer-login.html" class="account-btn" id="accountBtn">
 <i class="fas fa-user"></i>
@@ -517,13 +598,336 @@ body { padding-bottom: 0; }
 </a>
 <a href="cart.html" class="cart-icon-header">
 <i class="fas fa-shopping-cart"></i>
-<span class="nav-badge" id="headerCartCount" style="position: absolute; top: 0; right: 0; background: #ef4444; color: white; font-size: 10px; padding: 2px 6px; border-radius: 10px; min-width: 18px; text-align: center;">0</span>
+<span class="nav-badge" id="headerCartCount">0</span>
+</a>
+<a href="#" class="wishlist-icon-header" onclick="openWishlistModal(); return false;">
+<i class="fas fa-heart"></i>
+<span class="nav-badge" id="wishlistCount">0</span>
 </a>
 </div>
 </div>
 </div>
 
-<!-- ===== SIDE MENU ===== -->
+<!-- ===== SIDE MENU ===== --> 
+ <!-- Side Menu -->
+<div class="side-menu" id="sideMenu">
+    <div class="side-menu-header">
+        <i class="fas fa-user-circle"></i>
+        <div class="side-menu-info">
+            <h4 id="menuUserName">Guest User</h4>
+            <p id="menuUserEmail">Login to view profile</p>
+        </div>
+        <button class="side-menu-close" onclick="toggleMenu()">
+            <i class="fas fa-times"></i>
+        </button>
+    </div>
+    
+    <div class="side-menu-items">
+        <!-- Home Link -->
+        <a href="index.html" class="side-menu-item">
+            <i class="fas fa-home"></i>
+            <span>হোম</span>
+        </a>
+        
+        <!-- Categories Section in Side Menu -->
+<div style="padding: 15px 20px; color: var(--gray); font-size: 12px; font-weight: 600; text-transform: uppercase;">
+    সব ক্যাটাগরি
+</div>
+
+<!-- Main Categories -->
+<a href="#" class="side-menu-item" onclick="filterCategory('All'); toggleMenu(); return false;">
+    <i class="fas fa-th-large"></i>
+    <span>সব প্রোডাক্ট</span>
+</a>
+
+<!-- Sunglass Main Category with Sub-Categories -->
+<div class="side-menu-item has-submenu" onclick="toggleSubmenu('sunglassSubmenu')">
+    <i class="fas fa-sunglasses"></i>
+    <span>চশমা (Sunglass)</span>
+    <i class="fas fa-chevron-down" style="margin-left: auto; font-size: 12px; transition: 0.3s;" id="sunglassArrow"></i>
+</div>
+
+<div class="submenu" id="sunglassSubmenu" style="display: none;">
+    <a href="#" class="side-menu-item" onclick="filterCategory('পোলারাইজড চশমা'); toggleMenu(); return false;" style="padding-left: 60px; font-size: 13px;">
+        <span>পোলারাইজড চশমা (Polarized)</span>
+    </a>
+    <a href="#" class="side-menu-item" onclick="filterCategory('এভিয়েটর চশমা'); toggleMenu(); return false;" style="padding-left: 60px; font-size: 13px;">
+        <span>এভিয়েটর চশমা (Aviator)</span>
+    </a>
+    <a href="#" class="side-menu-item" onclick="filterCategory('ওয়েফেয়ারার চশমা'); toggleMenu(); return false;" style="padding-left: 60px; font-size: 13px;">
+        <span>ওয়েফেয়ারার চশমা (Wayfarer)</span>
+    </a>
+    <a href="#" class="side-menu-item" onclick="filterCategory('স্পোর্টস চশমা'); toggleMenu(); return false;" style="padding-left: 60px; font-size: 13px;">
+        <span>স্পোর্টস চশমা (Sports)</span>
+    </a>
+    <a href="#" class="side-menu-item" onclick="filterCategory('বাচ্চাদের চশমা'); toggleMenu(); return false;" style="padding-left: 60px; font-size: 13px;">
+        <span>বাচ্চাদের চশমা (Kids)</span>
+    </a>
+    <a href="#" class="side-menu-item" onclick="filterCategory('ড্রাইভিং চশমা'); toggleMenu(); return false;" style="padding-left: 60px; font-size: 13px;">
+        <span>ড্রাইভিং চশমা (Driving)</span>
+    </a>
+    <a href="#" class="side-menu-item" onclick="filterCategory('রাতে দেখার চশমা'); toggleMenu(); return false;" style="padding-left: 60px; font-size: 13px;">
+        <span>রাতে দেখার চশমা চশমা (Driving)</span>
+    </a>
+    <a href="#" class="side-menu-item" onclick="filterCategory('রিমলেস চশমা'); toggleMenu(); return false;" style="padding-left: 60px; font-size: 13px;">
+        <span>রিমলেস চশমা চশমা (Driving)</span>
+    </a>
+</div>
+
+<!-- Frame Main Category with Sub-Categories -->
+<div class="side-menu-item has-submenu" onclick="toggleSubmenu('frameSubmenu')">
+    <i class="fas fa-glasses"></i>
+    <span>চশমার ফ্রেম (Frame)</span>
+    <i class="fas fa-chevron-down" style="margin-left: auto; font-size: 12px; transition: 0.3s;" id="frameArrow"></i>
+</div>
+
+<div class="submenu" id="frameSubmenu" style="display: none;">
+    <a href="#" class="side-menu-item" onclick="filterCategory('পাওয়ার ফ্রেম'); toggleMenu(); return false;" style="padding-left: 60px; font-size: 13px;">
+        <span>পাওয়ার ফ্রেম (Power Frame)</span>
+    </a>
+    <a href="#" class="side-menu-item" onclick="filterCategory('নন-পাওয়ার ফ্রেম'); toggleMenu(); return false;" style="padding-left: 60px; font-size: 13px;">
+        <span>নন-পাওয়ার ফ্রেম (Non-Power)</span>
+    </a>
+    <a href="#" class="side-menu-item" onclick="filterCategory('মেটাল ফ্রেম'); toggleMenu(); return false;" style="padding-left: 60px; font-size: 13px;">
+        <span>মেটাল ফ্রেম (Metal Frame)</span>
+    </a>
+    <a href="#" class="side-menu-item" onclick="filterCategory('প্লাস্টিক ফ্রেম'); toggleMenu(); return false;" style="padding-left: 60px; font-size: 13px;">
+        <span>প্লাস্টিক ফ্রেম (Plastic Frame)</span>
+    </a>
+    <a href="#" class="side-menu-item" onclick="filterCategory('টাইটানিয়াম ফ্রেম'); toggleMenu(); return false;" style="padding-left: 60px; font-size: 13px;">
+        <span>টাইটানিয়াম ফ্রেম (Titanium)</span>
+    </a>
+    <a href="#" class="side-menu-item" onclick="filterCategory('বাচ্চাদের ফ্রেম'); toggleMenu(); return false;" style="padding-left: 60px; font-size: 13px;">
+        <span>বাচ্চাদের ফ্রেম (Kids Frame)</span>
+    </a>
+    <a href="#" class="side-menu-item" onclick="filterCategory('ফুল ফ্রেম'); toggleMenu(); return false;" style="padding-left: 60px; font-size: 13px;">
+        <span>ফুল ফ্রেম (Full Frame)</span>
+    </a>
+    <a href="#" class="side-menu-item" onclick="filterCategory('হাফ ফ্রেম'); toggleMenu(); return false;" style="padding-left: 60px; font-size: 13px;">
+        <span>হাফ ফ্রেম (Half Frame)</span>
+    </a>
+    <a href="#" class="side-menu-item" onclick="filterCategory('রিমলেস ফ্রেম'); toggleMenu(); return false;" style="padding-left: 60px; font-size: 13px;">
+        <span>রিমলেস ফ্রেম (Half Frame)</span>
+    </a>
+    
+</div>
+
+<!-- Watch & Wall Clock Main Category with Sub-Categories -->
+<div class="side-menu-item has-submenu" onclick="toggleSubmenu('watchClockSubmenu')">
+    <i class="fas fa-clock"></i>
+    <span>হাত ঘড়ি & দেয়াল ঘড়ি (Watch & Wall Clock)</span>
+    <i class="fas fa-chevron-down" style="margin-left: auto; font-size: 12px; transition: 0.3s;" id="watchArrow"></i>
+</div>
+
+<div class="submenu" id="watchClockSubmenu" style="display: none;">
+    <a href="#" class="side-menu-item" onclick="filterCategory('দেয়াল ঘড়ি'); toggleMenu(); return false;" style="padding-left: 60px; font-size: 13px;">
+        <span>দেয়াল ঘড়ি (Wall Clock)</span>
+    </a>
+    <a href="#" class="side-menu-item" onclick="filterCategory('ডিজিটাল দেয়াল ঘড়ি'); toggleMenu(); return false;" style="padding-left: 60px; font-size: 13px;">
+        <span>ডিজিটাল দেয়াল ঘড়ি (Digital Wall Clock)</span>
+    </a>
+    <a href="#" class="side-menu-item" onclick="filterCategory('টেবিল ঘড়ি'); toggleMenu(); return false;" style="padding-left: 60px; font-size: 13px;">
+        <span>টেবিল ঘড়ি (Table Clock)</span>
+    </a>
+    <a href="#" class="side-menu-item" onclick="filterCategory('পুরুষদের হাত ঘড়ি'); toggleMenu(); return false;" style="padding-left: 60px; font-size: 13px;">
+        <span>পুরুষদের হাত ঘড়ি (Men Watch)</span>
+    </a>
+    <a href="#" class="side-menu-item" onclick="filterCategory('মহিলাদের হাত ঘড়ি'); toggleMenu(); return false;" style="padding-left: 60px; font-size: 13px;">
+        <span>মহিলাদের হাত ঘড়ি (Women Watch)</span>
+    </a>
+    <a href="#" class="side-menu-item" onclick="filterCategory('ছেলেদের হাত ঘড়ি'); toggleMenu(); return false;" style="padding-left: 60px; font-size: 13px;">
+        <span>ছেলেদের হাত ঘড়ি (Boys Watch)</span>
+    </a>
+    <a href="#" class="side-menu-item" onclick="filterCategory('মেয়েদের হাত ঘড়ি'); toggleMenu(); return false;" style="padding-left: 60px; font-size: 13px;">
+        <span>মেয়েদের হাত ঘড়ি (Girls Watch)</span>
+    </a>
+</div>
+<!-- Electronics Main Category with Sub-Categories -->
+<div class="side-menu-item has-submenu" onclick="toggleSubmenu('electronicsSubmenu')">
+    <i class="fas fa-plug"></i>
+    <span>ইলেকট্রনিক্স (Electronics)</span>
+    <i class="fas fa-chevron-down" style="margin-left: auto; font-size: 12px; transition: 0.3s;" id="electronicsArrow"></i>
+</div>
+
+<div class="submenu" id="electronicsSubmenu" style="display: none;">
+    <a href="#" class="side-menu-item" onclick="filterCategory('মোবাইল ফোন'); toggleMenu(); return false;" style="padding-left: 60px; font-size: 13px;">
+        <span>মোবাইল ফোন (Mobile Phone)</span>
+    </a>
+    <a href="#" class="side-menu-item" onclick="filterCategory('হেডফোন'); toggleMenu(); return false;" style="padding-left: 60px; font-size: 13px;">
+        <span>হেডফোন/ইয়ারফোন (Headphone)</span>
+    </a>
+    <a href="#" class="side-menu-item" onclick="filterCategory('চার্জার'); toggleMenu(); return false;" style="padding-left: 60px; font-size: 13px;">
+        <span>চার্জার (Charger)</span>
+    </a>
+    <a href="#" class="side-menu-item" onclick="filterCategory('পাওয়ার ব্যাংক'); toggleMenu(); return false;" style="padding-left: 60px; font-size: 13px;">
+        <span>পাওয়ার ব্যাংক (Power Bank)</span>
+    </a>
+    <a href="#" class="side-menu-item" onclick="filterCategory('স্মার্ট ওয়াচ'); toggleMenu(); return false;" style="padding-left: 60px; font-size: 13px;">
+        <span>স্মার্ট ওয়াচ (Smart Watch)</span>
+    </a>
+    <a href="#" class="side-menu-item" onclick="filterCategory('ব্লুটুথ স্পিকার'); toggleMenu(); return false;" style="padding-left: 60px; font-size: 13px;">
+        <span>ব্লুটুথ স্পিকার (Bluetooth Speaker)</span>
+    </a>
+    <a href="#" class="side-menu-item" onclick="filterCategory('ইউএসবি কেবল'); toggleMenu(); return false;" style="padding-left: 60px; font-size: 13px;">
+        <span>ইউএসবি কেবল (USB Cable)</span>
+    </a>
+    <a href="#" class="side-menu-item" onclick="filterCategory('মোবাইল হোল্ডার'); toggleMenu(); return false;" style="padding-left: 60px; font-size: 13px;">
+        <span>মোবাইল হোল্ডার (Mobile Holder)</span>
+    </a>
+</div>
+
+<!-- Home & Living Main Category with Sub-Categories -->
+<div class="side-menu-item has-submenu" onclick="toggleSubmenu('homeSubmenu')">
+    <i class="fas fa-couch"></i>
+    <span>হোম & লিভিং (Home & Living)</span>
+    <i class="fas fa-chevron-down" style="margin-left: auto; font-size: 12px; transition: 0.3s;" id="homeArrow"></i>
+</div>
+
+<div class="submenu" id="homeSubmenu" style="display: none;">
+    <a href="#" class="side-menu-item" onclick="filterCategory('হোম ডেকোর'); toggleMenu(); return false;" style="padding-left: 60px; font-size: 13px;">
+        <span>হোম ডেকোর (Home Decor)</span>
+    </a>
+    <a href="#" class="side-menu-item" onclick="filterCategory('রান্নাঘরের জিনিস'); toggleMenu(); return false;" style="padding-left: 60px; font-size: 13px;">
+        <span>রান্নাঘরের জিনিস (Kitchen Items)</span>
+    </a>
+    <a href="#" class="side-menu-item" onclick="filterCategory('আসবাবপত্র'); toggleMenu(); return false;" style="padding-left: 60px; font-size: 13px;">
+        <span>আসবাবপত্র (Furniture)</span>
+    </a>
+    <a href="#" class="side-menu-item" onclick="filterCategory('লাইটিং'); toggleMenu(); return false;" style="padding-left: 60px; font-size: 13px;">
+        <span>লাইটিং (Lighting)</span>
+    </a>
+    <a href="#" class="side-menu-item" onclick="filterCategory('বিছানার চাদর'); toggleMenu(); return false;" style="padding-left: 60px; font-size: 13px;">
+        <span>বিছানার চাদর (Bed Sheets)</span>
+    </a>
+    <a href="#" class="side-menu-item" onclick="filterCategory('বালিশ/কুশন'); toggleMenu(); return false;" style="padding-left: 60px; font-size: 13px;">
+        <span>বালিশ/কুশন (Pillow/Cushion)</span>
+    </a>
+</div>
+
+<!-- Spices Main Category with Sub-Categories -->
+<div class="side-menu-item has-submenu" onclick="toggleSubmenu('spicesSubmenu')">
+    <i class="fas fa-pepper-hot"></i>
+    <span>মসলা (Spices)</span>
+    <i class="fas fa-chevron-down" style="margin-left: auto; font-size: 12px; transition: 0.3s;" id="spicesArrow"></i>
+</div>
+
+<div class="submenu" id="spicesSubmenu" style="display: none;">
+    <a href="#" class="side-menu-item" onclick="filterCategory('হলুদ'); toggleMenu(); return false;" style="padding-left: 60px; font-size: 13px;">
+        <span>হলুদ (Turmeric)</span>
+    </a>
+    <a href="#" class="side-menu-item" onclick="filterCategory('জিরা বীজ'); toggleMenu(); return false;" style="padding-left: 60px; font-size: 13px;">
+        <span>জিরা বীজ (Cumin Seeds)</span>
+    </a>
+    <a href="#" class="side-menu-item" onclick="filterCategory('ধনিয়া গুঁড়া'); toggleMenu(); return false;" style="padding-left: 60px; font-size: 13px;">
+        <span>ধনিয়া গুঁড়া/বীজ (Coriander)</span>
+    </a>
+    <a href="#" class="side-menu-item" onclick="filterCategory('গোলমরিচ'); toggleMenu(); return false;" style="padding-left: 60px; font-size: 13px;">
+        <span>গোলমরিচ/কালি মির্চ (Black Pepper)</span>
+    </a>
+    <a href="#" class="side-menu-item" onclick="filterCategory('এলাচ সবুজ'); toggleMenu(); return false;" style="padding-left: 60px; font-size: 13px;">
+        <span>এলাচ সবুজ (Green Cardamom)</span>
+    </a>
+    <a href="#" class="side-menu-item" onclick="filterCategory('এলাচ কালো'); toggleMenu(); return false;" style="padding-left: 60px; font-size: 13px;">
+        <span>এলাচ কালো (Black Cardamom)</span>
+    </a>
+    <a href="#" class="side-menu-item" onclick="filterCategory('দারুচিনি'); toggleMenu(); return false;" style="padding-left: 60px; font-size: 13px;">
+        <span>দারুচিনি/ডালচিনি (Cinnamon)</span>
+    </a>
+    <a href="#" class="side-menu-item" onclick="filterCategory('লবঙ্গ'); toggleMenu(); return false;" style="padding-left: 60px; font-size: 13px;">
+        <span>লবঙ্গ/লাউং (Cloves)</span>
+    </a>
+    <a href="#" class="side-menu-item" onclick="filterCategory('মেথি বীজ'); toggleMenu(); return false;" style="padding-left: 60px; font-size: 13px;">
+        <span>মেথি বীজ/দানা (Fenugreek)</span>
+    </a>
+    <a href="#" class="side-menu-item" onclick="filterCategory('মৌরি বীজ'); toggleMenu(); return false;" style="padding-left: 60px; font-size: 13px;">
+        <span>মৌরি বীজ/সাউনফ (Fennel Seeds)</span>
+    </a>
+    <a href="#" class="side-menu-item" onclick="filterCategory('সরিষা বীজ'); toggleMenu(); return false;" style="padding-left: 60px; font-size: 13px;">
+        <span>সরিষা বীজ/রাই (Mustard Seeds)</span>
+    </a>
+    <a href="#" class="side-menu-item" onclick="filterCategory('হিং'); toggleMenu(); return false;" style="padding-left: 60px; font-size: 13px;">
+        <span>হিং (Asafoetida)</span>
+    </a>
+    <a href="#" class="side-menu-item" onclick="filterCategory('লাল মরিচ'); toggleMenu(); return false;" style="padding-left: 60px; font-size: 13px;">
+        <span>লাল মরিচ গুঁড়ো (Red Chili Powder)</span>
+    </a>
+    <a href="#" class="side-menu-item" onclick="filterCategory('তেজপাতা'); toggleMenu(); return false;" style="padding-left: 60px; font-size: 13px;">
+        <span>তেজপাতা (Bay Leaves)</span>
+    </a>
+    <a href="#" class="side-menu-item" onclick="filterCategory('জায়ফল'); toggleMenu(); return false;" style="padding-left: 60px; font-size: 13px;">
+        <span>জায়ফল/জয়ফল (Nutmeg)</span>
+    </a>
+    <a href="#" class="side-menu-item" onclick="filterCategory('গদা'); toggleMenu(); return false;" style="padding-left: 60px; font-size: 13px;">
+        <span>গদা/জাবিত্রী (Mace)</span>
+    </a>
+    <a href="#" class="side-menu-item" onclick="filterCategory('ক্যারাম বীজ'); toggleMenu(); return false;" style="padding-left: 60px; font-size: 13px;">
+        <span>ক্যারাম বীজ/জোয়ান (Carom Seeds)</span>
+    </a>
+    <a href="#" class="side-menu-item" onclick="filterCategory('স্টার অ্যানিস'); toggleMenu(); return false;" style="padding-left: 60px; font-size: 13px;">
+        <span>স্টার অ্যানিস/বাদিয়ান (Star Anise)</span>
+    </a>
+    <a href="#" class="side-menu-item" onclick="filterCategory('আমচুর'); toggleMenu(); return false;" style="padding-left: 60px; font-size: 13px;">
+        <span>শুকনো আমের গুঁড়ো/আমচুর (Dry Mango Powder)</span>
+    </a>
+    <a href="#" class="side-menu-item" onclick="filterCategory('ডালিমের বীজ'); toggleMenu(); return false;" style="padding-left: 60px; font-size: 13px;">
+        <span>ডালিমের বীজ/অনার্দন (Pomegranate Seeds)</span>
+    </a>
+    <a href="#" class="side-menu-item" onclick="filterCategory('কাসুরি মেথি'); toggleMenu(); return false;" style="padding-left: 60px; font-size: 13px;">
+        <span>শুকনো মেথি পাতা/কাসুরি মেথি (Dried Fenugreek)</span>
+    </a>
+    <a href="#" class="side-menu-item" onclick="filterCategory('রসুন'); toggleMenu(); return false;" style="padding-left: 60px; font-size: 13px;">
+        <span>রসুন/লেহসুন (Garlic)</span>
+    </a>
+    <a href="#" class="side-menu-item" onclick="filterCategory('আদা'); toggleMenu(); return false;" style="padding-left: 60px; font-size: 13px;">
+        <span>আদা/আদ্রাক (Ginger)</span>
+    </a>
+    <a href="#" class="side-menu-item" onclick="filterCategory('পোস্ত বীজ'); toggleMenu(); return false;" style="padding-left: 60px; font-size: 13px;">
+        <span>পোস্ত বীজ/খাশখাশ (Poppy Seeds)</span>
+    </a>
+    <a href="#" class="side-menu-item" onclick="filterCategory('শাহী জিরা'); toggleMenu(); return false;" style="padding-left: 60px; font-size: 13px;">
+        <span>ক্যারাওয়ে বীজ/শাহী জিরা (Caraway Seeds)</span>
+    </a>
+    <a href="#" class="side-menu-item" onclick="filterCategory('গরম মশলা'); toggleMenu(); return false;" style="padding-left: 60px; font-size: 13px;">
+        <span>গরম মশলা (Garam Masala)</span>
+    </a>
+    <a href="#" class="side-menu-item" onclick="filterCategory('কারি পাউডার'); toggleMenu(); return false;" style="padding-left: 60px; font-size: 13px;">
+        <span>কারি পাউডার (Curry Powder)</span>
+    </a>
+    <a href="#" class="side-menu-item" onclick="filterCategory('চাট মশলা'); toggleMenu(); return false;" style="padding-left: 60px; font-size: 13px;">
+        <span>চাট মশলা (Chaat Masala)</span>
+    </a>
+    <a href="#" class="side-menu-item" onclick="filterCategory('তন্দুরি মশলা'); toggleMenu(); return false;" style="padding-left: 60px; font-size: 13px;">
+        <span>তন্দুরি মশলা (Tandoori Masala)</span>
+    </a>
+</div>
+        
+        <!-- Other Menu Items -->
+        <a href="cart.html" class="side-menu-item">
+            <i class="fas fa-shopping-cart"></i>
+            <span>আমার কার্ট</span>
+            <span class="nav-badge" id="sideMenuCartCount">0</span>
+        </a>
+        
+        <a href="#" class="side-menu-item" onclick="openWishlist(); toggleMenu(); return false;">
+            <i class="fas fa-heart"></i>
+            <span>উইশলিস্ট</span>
+            <span class="nav-badge" id="sideMenuWishlistCount">0</span>
+        </a>
+        
+        <a href="customer-orders.html" class="side-menu-item">
+            <i class="fas fa-box"></i>
+            <span>আমার অর্ডার</span>
+        </a>
+        
+        <a href="#" class="side-menu-item" id="menuLoginLink">
+            <i class="fas fa-sign-in-alt"></i>
+            <span>লগইন</span>
+        </a>
+    </div>
+</div>
+
+<!-- Menu Overlay -->
+<div class="menu-overlay" id="menuOverlay" onclick="toggleMenu()"></div>
 <div class="menu-overlay" id="menuOverlay" onclick="toggleMenu()"></div>
 <div class="side-menu" id="sideMenu">
 <div class="side-menu-header">
@@ -541,6 +945,19 @@ body { padding-bottom: 0; }
 <i class="fas fa-home"></i>
 <span>Home</span>
 </a>
+<a href="cart.html" class="side-menu-item">
+<i class="fas fa-shopping-cart"></i>
+<span>Cart</span>
+</a>
+<a href="#" class="side-menu-item" onclick="openWishlistModal(); toggleMenu(); return false;">
+<i class="fas fa-heart"></i>
+<span>Wishlist</span>
+<span class="nav-badge" id="menuWishlistCount" style="margin-left: auto;">0</span>
+</a>
+<a href="#" class="side-menu-item" onclick="openPdModal(); toggleMenu(); return false;">
+<i class="fas fa-ruler-horizontal"></i>
+<span>চোখের মাপ গাইড (PD)</span>
+</a>
 <a href="customer-orders.html" class="side-menu-item">
 <i class="fas fa-box"></i>
 <span>My Orders</span>
@@ -548,22 +965,6 @@ body { padding-bottom: 0; }
 <a href="customer-login.html" class="side-menu-item" id="menuLoginLink">
 <i class="fas fa-sign-in-alt"></i>
 <span>Login</span>
-</a>
-<a href="cart.html" class="side-menu-item">
-<i class="fas fa-shopping-cart"></i>
-<span>Cart</span>
-</a>
-<a href="#" class="side-menu-item" onclick="alert('Coming Soon!'); return false;">
-<i class="fas fa-heart"></i>
-<span>Wishlist</span>
-</a>
-<a href="#" class="side-menu-item" onclick="alert('Coming Soon!'); return false;">
-<i class="fas fa-cog"></i>
-<span>Settings</span>
-</a>
-<a href="#" class="side-menu-item" onclick="alert('Coming Soon!'); return false;">
-<i class="fas fa-headset"></i>
-<span>Support</span>
 </a>
 </div>
 </div>
@@ -576,7 +977,7 @@ body { padding-bottom: 0; }
 <p>Best Quality Products at Best Price in Bangladesh</p>
 <div class="hero-buttons">
 <a href="#products" class="btn btn-primary">Shop Now</a>
-<a href="#offers" class="btn btn-secondary">View Offers</a>
+<a href="#categories" class="btn btn-secondary">View Categories</a>
 </div>
 </div>
 </div>
@@ -612,8 +1013,8 @@ body { padding-bottom: 0; }
 <span>Home</span>
 </div>
 <div class="cat-card" onclick="filterCategory('Frame')">
-<i class="fas fa-image"></i>
-<span>Frame</span>
+    <i class="fas fa-glasses"></i>  <!-- ✅ চশমার ফ্রেম আইকন -->
+    <span>Frame</span>
 </div>
 </div>
 </div>
@@ -719,11 +1120,108 @@ body { padding-bottom: 0; }
 </a>
 </nav>
 
+<!-- ===== WISHLIST MODAL ===== -->
+<div class="modal" id="wishlistModal">
+<div class="modal-content">
+<span class="close" onclick="closeWishlistModal()">&times;</span>
+<h2><i class="fas fa-heart"></i> আমার Wishlist</h2>
+<div id="wishlistItems" style="margin: 20px 0; max-height: 300px; overflow-y: auto;"></div>
+<button onclick="closeWishlistModal()" style="width: 100%; padding: 10px; background: var(--primary); color: white; border: none; border-radius: 5px; cursor: pointer;">বন্ধ করুন</button>
+</div>
+</div>
+
+<!-- ===== PD GUIDE MODAL ===== -->
+<div class="modal" id="pdModal">
+<div class="modal-content">
+<span class="close" onclick="closePdModal()">&times;</span>
+<h2><i class="fas fa-ruler-horizontal"></i> চোখের মাপ (PD) গাইড</h2>
+<div style="text-align: left; margin: 20px 0;">
+<p>১. একটি স্কেল বা রুলার নিন।</p>
+<p>২. আয়নার সামনে দাঁড়ান।</p>
+<p>৩. চোখের মণির মাঝখান থেকে অন্য চোখের মণির মাঝখান পর্যন্ত মাপ নিন (মিলিমিটারে)।</p>
+<p>৪. সাধারণত প্রাপ্তবয়স্কদের PD ৫৪-৭৪ মিলিমিটার হয়ে থাকে।</p>
+</div>
+<button onclick="closePdModal()" style="width: 100%; padding: 10px; background: var(--primary); color: white; border: none; border-radius: 5px; cursor: pointer;">বুঝেছি</button>
+</div>
+</div>
+
 <!-- ===== SCRIPTS ===== -->
 <script src="js/products.js"></script>
 <script src="js/cart.js"></script>
 <script>
-// Toggle Side Menu
+// ==============================
+// WISHLIST FUNCTIONS
+// ==============================
+function toggleWishlist(productId) {
+let wishlist = JSON.parse(localStorage.getItem('wishlist')) || [];
+const index = wishlist.indexOf(productId);
+if (index === -1) {
+wishlist.push(productId);
+alert('✅ Wishlist এ যুক্ত হয়েছে!');
+} else {
+wishlist.splice(index, 1);
+alert('❌ Wishlist থেকে সরানো হয়েছে!');
+}
+localStorage.setItem('wishlist', JSON.stringify(wishlist));
+updateWishlistCount();
+if (typeof loadProducts === 'function') { loadProducts(); }
+}
+
+function updateWishlistCount() {
+const wishlist = JSON.parse(localStorage.getItem('wishlist')) || [];
+const countEl = document.getElementById('wishlistCount');
+const menuCountEl = document.getElementById('menuWishlistCount');
+if (countEl) countEl.textContent = wishlist.length;
+if (menuCountEl) menuCountEl.textContent = wishlist.length;
+}
+
+function openWishlistModal() {
+const modal = document.getElementById('wishlistModal');
+const container = document.getElementById('wishlistItems');
+const wishlist = JSON.parse(localStorage.getItem('wishlist')) || [];
+const products = JSON.parse(localStorage.getItem('products')) || [];
+if (!modal || !container) return;
+container.innerHTML = '';
+if (wishlist.length === 0) {
+container.innerHTML = '<p style="text-align:center;color:var(--gray);padding:20px;">Wishlist খালি!</p>';
+} else {
+wishlist.forEach(id => {
+const product = products.find(p => p.id === id);
+if (product) {
+container.innerHTML += '<div style="display:flex;gap:10px;margin-bottom:10px;border-bottom:1px solid var(--border);padding-bottom:10px;">' +
+'<img src="' + product.img + '" style="width:50px;height:50px;object-fit:cover;border-radius:5px;">' +
+'<div style="flex:1;text-align:left;">' +
+'<p style="font-weight:600;">' + product.name + '</p>' +
+'<p style="color:var(--primary);">৳' + product.price + '</p>' +
+'</div>' +
+'<button onclick="addToCart(' + product.id + '); toggleWishlist(' + product.id + '); closeWishlistModal();" style="background:var(--primary);color:white;border:none;padding:5px 10px;border-radius:5px;cursor:pointer;">Cart এ নিন</button>' +
+'</div>';
+}
+});
+}
+modal.classList.add('show');
+}
+
+function closeWishlistModal() {
+const modal = document.getElementById('wishlistModal');
+if (modal) modal.classList.remove('show');
+}
+
+// ==============================
+// PD GUIDE FUNCTIONS
+// ==============================
+function openPdModal() {
+const modal = document.getElementById('pdModal');
+if (modal) modal.classList.add('show');
+}
+function closePdModal() {
+const modal = document.getElementById('pdModal');
+if (modal) modal.classList.remove('show');
+}
+
+// ==============================
+// MENU FUNCTIONS
+// ==============================
 function toggleMenu() {
 const menu = document.getElementById('sideMenu');
 const overlay = document.getElementById('menuOverlay');
@@ -733,7 +1231,9 @@ overlay.classList.toggle('show');
 }
 }
 
-// Update Account Info
+// ==============================
+// ACCOUNT & CART FUNCTIONS
+// ==============================
 function updateAccountInfo() {
 const customerName = localStorage.getItem('customerName');
 const customerEmail = localStorage.getItem('customerEmail');
@@ -743,7 +1243,6 @@ const menuLoginLink = document.getElementById('menuLoginLink');
 const accountBtn = document.getElementById('accountBtn');
 const accountText = document.getElementById('accountText');
 const navAccount = document.getElementById('navAccount');
-
 if (customerName) {
 if (menuUserName) menuUserName.textContent = customerName;
 if (menuUserEmail) menuUserEmail.textContent = customerEmail || 'Customer';
@@ -778,7 +1277,6 @@ if (navAccount) navAccount.href = 'customer-login.html';
 }
 }
 
-// Update Cart Count
 function updateCartCount() {
 const cart = JSON.parse(localStorage.getItem('cart')) || [];
 const count = cart.reduce((sum, item) => sum + item.quantity, 0);
@@ -788,7 +1286,6 @@ if (headerCartCount) headerCartCount.textContent = count;
 if (bottomCartCount) bottomCartCount.textContent = count;
 }
 
-// Set Active Nav Item
 function setActiveNavItem() {
 const navItems = document.querySelectorAll('.nav-item');
 const currentPath = window.location.pathname.split('/').pop();
@@ -801,7 +1298,6 @@ item.classList.add('active');
 });
 }
 
-// Filter Category
 function filterCategory(category) {
 if (typeof loadProducts === 'function') {
 if (category === 'All') {
@@ -813,17 +1309,68 @@ loadProducts(filtered);
 }
 }
 document.querySelectorAll('.cat-card').forEach(card => card.classList.remove('active'));
+if (event && event.target && event.target.closest('.cat-card')) {
 event.target.closest('.cat-card').classList.add('active');
 }
+}
 
+// ==============================
+// INITIALIZATION
+// ==============================
+document.addEventListener('DOMContentLoaded', function() {
+// Menu closed by default
+const menu = document.getElementById('sideMenu');
+const overlay = document.getElementById('menuOverlay');
+if (menu) menu.classList.remove('show');
+if (overlay) overlay.classList.remove('show');
 // Initialize
-document.addEventListener('DOMContentLoaded', () => {
+updateWishlistCount();
 updateAccountInfo();
 updateCartCount();
 setActiveNavItem();
 if (typeof initializeProducts === 'function') {
 initializeProducts();
 }
+});
+</script>
+    <!-- Location Data -->
+    <script src="js/locations.js"></script>
+    <!-- Core Logic -->
+    <script src="js/products.js"></script>
+    <script src="js/cart.js"></script>
+    <!-- UI Components -->
+    <script src="js/components.js"></script>
+    <script src="js/ui.js"></script>
+
+    <script>
+// View Categories Button Click Handler
+document.addEventListener('DOMContentLoaded', function() {
+    const viewCategoriesBtn = document.querySelector('.btn-secondary[href="#categories"]');
+    const categoriesSection = document.getElementById('categories');
+    
+    if (viewCategoriesBtn && categoriesSection) {
+        viewCategoriesBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            categoriesSection.scrollIntoView({ 
+                behavior: 'smooth',
+                block: 'start'
+            });
+        });
+    }
+    
+    // Shop Now Button Click Handler
+    const shopNowBtn = document.querySelector('.btn-primary[href="#products"]');
+    const productsSection = document.getElementById('products');
+    
+    if (shopNowBtn && productsSection) {
+        shopNowBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            productsSection.scrollIntoView({ 
+                behavior: 'smooth',
+                block: 'start'
+            });
+        });
+    }
 });
 </script>
 </body>
