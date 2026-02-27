@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="bn">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Checkout - LiponShop</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Hind+Siliguri:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
 :root {
 --primary: #4f46e5;
@@ -23,15 +23,14 @@
 margin: 0;
 padding: 0;
 box-sizing: border-box;
-font-family: 'Poppins', sans-serif;
+font-family: 'Poppins', 'Hind Siliguri', sans-serif;
 }
 body {
 background: var(--light);
 color: var(--dark);
 line-height: 1.6;
-padding-bottom: 80px;
+padding-bottom: 30px;
 }
-/* Header */
 .checkout-header {
 background: var(--white);
 padding: 20px 0;
@@ -66,7 +65,6 @@ transition: 0.3s;
 .back-link:hover {
 color: var(--primary);
 }
-/* Main Container */
 .checkout-container {
 max-width: 1200px;
 margin: 30px auto;
@@ -75,7 +73,6 @@ display: grid;
 grid-template-columns: 1.5fr 1fr;
 gap: 25px;
 }
-/* Form Sections */
 .form-section {
 background: var(--white);
 padding: 25px;
@@ -138,6 +135,65 @@ resize: vertical;
 font-size: 12px;
 color: var(--gray);
 }
+/* Guest Checkout Toggle */
+.guest-checkout-toggle {
+display: flex;
+align-items: center;
+gap: 10px;
+margin-bottom: 20px;
+padding: 15px;
+background: #eef2ff;
+border-radius: 10px;
+}
+.guest-checkout-toggle input {
+width: 20px;
+height: 20px;
+}
+/* Delivery Options */
+.delivery-options {
+display: flex;
+flex-direction: column;
+gap: 12px;
+}
+.delivery-option {
+display: flex;
+align-items: center;
+gap: 12px;
+padding: 15px;
+border: 2px solid var(--border);
+border-radius: 10px;
+cursor: pointer;
+transition: all 0.3s;
+}
+.delivery-option:hover,
+.delivery-option.selected {
+border-color: var(--primary);
+background: #eef2ff;
+}
+.delivery-option input {
+width: 18px;
+height: 18px;
+cursor: pointer;
+}
+.delivery-option label {
+flex: 1;
+cursor: pointer;
+display: flex;
+align-items: center;
+gap: 10px;
+font-weight: 500;
+}
+.delivery-option i {
+font-size: 20px;
+width: 24px;
+text-align: center;
+}
+.delivery-option.express i {
+color: var(--danger);
+}
+.delivery-option.regular i {
+color: var(--success);
+}
 /* Payment Methods */
 .payment-methods {
 display: flex;
@@ -177,8 +233,12 @@ font-size: 20px;
 width: 24px;
 text-align: center;
 }
-.payment-option.bkash i { color: #e2136e; }
-.payment-option.cod i { color: var(--success); }
+.payment-option.bkash i {
+color: #e2136e;
+}
+.payment-option.cod i {
+color: var(--success);
+}
 .payment-details {
 margin-top: 15px;
 padding: 15px;
@@ -203,6 +263,127 @@ padding: 4px 8px;
 border-radius: 4px;
 font-family: monospace;
 color: var(--primary);
+}
+/* Coupon Code */
+.coupon-section {
+margin: 20px 0;
+padding: 15px;
+background: #f0fdf4;
+border: 2px dashed var(--success);
+border-radius: 10px;
+}
+.coupon-input-group {
+display: flex;
+gap: 10px;
+}
+.coupon-input-group input {
+flex: 1;
+padding: 12px 15px;
+border: 2px solid var(--border);
+border-radius: 10px;
+font-size: 14px;
+}
+.coupon-input-group button {
+padding: 12px 25px;
+background: var(--success);
+color: white;
+border: none;
+border-radius: 10px;
+font-weight: 600;
+cursor: pointer;
+transition: all 0.3s;
+}
+.coupon-input-group button:hover {
+background: #059669;
+transform: translateY(-2px);
+}
+.coupon-message {
+margin-top: 10px;
+font-size: 14px;
+font-weight: 500;
+}
+.coupon-message.success {
+color: var(--success);
+}
+.coupon-message.error {
+color: var(--danger);
+}
+/* Eyeglass Customization */
+.eyeglass-customization {
+margin-top: 20px;
+padding: 20px;
+background: #f8fafc;
+border-radius: 10px;
+border-left: 4px solid var(--primary);
+}
+.eyeglass-customization h4 {
+margin-bottom: 15px;
+color: var(--primary);
+display: flex;
+align-items: center;
+gap: 8px;
+}
+.prescription-upload {
+margin: 15px 0;
+}
+.prescription-upload input[type="file"] {
+width: 100%;
+padding: 10px;
+border: 2px dashed var(--border);
+border-radius: 10px;
+cursor: pointer;
+}
+.frame-size-selector,
+.lens-type-selector {
+display: flex;
+gap: 10px;
+margin: 10px 0;
+}
+.size-option,
+.lens-option {
+flex: 1;
+padding: 10px;
+border: 2px solid var(--border);
+border-radius: 8px;
+text-align: center;
+cursor: pointer;
+transition: all 0.3s;
+font-size: 14px;
+font-weight: 500;
+}
+.size-option:hover,
+.size-option.selected,
+.lens-option:hover,
+.lens-option.selected {
+border-color: var(--primary);
+background: #eef2ff;
+color: var(--primary);
+}
+.addon-options {
+display: grid;
+grid-template-columns: repeat(2, 1fr);
+gap: 10px;
+margin: 15px 0;
+}
+.addon-option {
+display: flex;
+align-items: center;
+gap: 8px;
+padding: 10px;
+border: 2px solid var(--border);
+border-radius: 8px;
+cursor: pointer;
+transition: all 0.3s;
+font-size: 13px;
+}
+.addon-option:hover,
+.addon-option.selected {
+border-color: var(--primary);
+background: #eef2ff;
+}
+.addon-option input {
+width: 16px;
+height: 16px;
 }
 /* Order Summary */
 .order-summary {
@@ -375,9 +556,15 @@ color: white;
 animation: scaleIn 0.5s ease;
 }
 @keyframes scaleIn {
-0% { transform: scale(0); }
-50% { transform: scale(1.2); }
-100% { transform: scale(1); }
+0% {
+transform: scale(0);
+}
+50% {
+transform: scale(1.2);
+}
+100% {
+transform: scale(1);
+}
 }
 .modal h3 {
 font-size: 24px;
@@ -414,66 +601,23 @@ background: var(--primary-dark);
 transform: translateY(-2px);
 }
 @keyframes fadeIn {
-from { opacity: 0; }
-to { opacity: 1; }
+from {
+opacity: 0;
+}
+to {
+opacity: 1;
+}
 }
 @keyframes slideUp {
-from { opacity: 0; transform: translateY(30px); }
-to { opacity: 1; transform: translateY(0); }
+from {
+opacity: 0;
+transform: translateY(30px);
 }
-/* Bottom Navigation */
-.bottom-nav {
-position: fixed;
-bottom: 0;
-left: 0;
-right: 0;
-background: var(--white);
-display: flex;
-justify-content: space-around;
-align-items: center;
-padding: 10px 0;
-box-shadow: 0 -2px 20px rgba(0,0,0,0.1);
-z-index: 2000;
-border-top: 1px solid var(--border);
+to {
+opacity: 1;
+transform: translateY(0);
 }
-.nav-item {
-display: flex;
-flex-direction: column;
-align-items: center;
-gap: 4px;
-padding: 8px 12px;
-color: var(--gray);
-text-decoration: none;
-font-size: 11px;
-font-weight: 500;
-transition: all 0.3s;
-flex: 1;
-max-width: 80px;
-position: relative;
 }
-.nav-item i {
-font-size: 20px;
-transition: all 0.3s;
-}
-.nav-item:hover, .nav-item.active {
-color: var(--primary);
-}
-.nav-item.active i {
-transform: translateY(-3px);
-}
-.nav-item .nav-badge {
-position: absolute;
-top: 5px;
-right: 20%;
-background: var(--danger);
-color: white;
-font-size: 10px;
-padding: 2px 6px;
-border-radius: 10px;
-min-width: 18px;
-text-align: center;
-}
-/* Mobile Responsive */
 @media (max-width: 900px) {
 .checkout-container {
 grid-template-columns: 1fr;
@@ -496,10 +640,19 @@ padding: 20px;
 padding: 12px;
 font-size: 14px;
 }
+.coupon-input-group {
+flex-direction: column;
+}
+.size-option,
+.lens-option {
+font-size: 12px;
+padding: 8px;
+}
 }
 </style>
 </head>
 <body>
+
 <!-- Header -->
 <div class="checkout-header">
 <div class="header-content">
@@ -507,84 +660,205 @@ font-size: 14px;
 <i class="fas fa-shopping-bag"></i> LiponShop
 </a>
 <a href="cart.html" class="back-link">
-<i class="fas fa-arrow-left"></i> Back to Cart
+<i class="fas fa-arrow-left"></i> কার্টে ফিরে যান
 </a>
 </div>
 </div>
+
 <!-- Main Content -->
 <div class="checkout-container">
-<!-- Left: Forms -->
 <div class="checkout-forms">
+
+<!-- Guest Checkout Toggle -->
+<div class="form-section">
+<div class="guest-checkout-toggle">
+<input type="checkbox" id="guestCheckout" onchange="toggleGuestCheckout()">
+<label for="guestCheckout">
+<strong>গেস্ট চেকআউট</strong> (অ্যাকাউন্ট ছাড়া অর্ডার করুন)
+</label>
+</div>
+</div>
+
 <!-- Customer Information -->
 <div class="form-section">
 <h3 class="section-title">
-<i class="fas fa-user"></i> Customer Information
+<i class="fas fa-user"></i> গ্রাহকের তথ্য
 </h3>
 <div class="form-grid">
 <div class="form-group full-width">
-<label>Full Name *</label>
-<input type="text" id="custName" placeholder="Enter your full name" required>
+<label>পূর্ণ নাম *</label>
+<input type="text" id="custName" placeholder="আপনার পূর্ণ নাম লিখুন" required>
 </div>
 <div class="form-group">
-<label>Phone Number *</label>
+<label>মোবাইল নম্বর *</label>
 <input type="tel" id="custPhone" placeholder="017XXXXXXXX" pattern="01[3-9][0-9]{8}" required>
-<span class="form-hint">Format: 01712345678</span>
+<span class="form-hint">ফরম্যাট: 01712345678</span>
 </div>
 <div class="form-group">
-<label>Email Address</label>
+<label>ইমেইল ঠিকানা</label>
 <input type="email" id="custEmail" placeholder="your@email.com">
 </div>
 <div class="form-group full-width">
-<label>Delivery Address (House/Road) *</label>
-<textarea id="custAddress" placeholder="House No, Road No, Block/Sector" required></textarea>
+<label>ডেলিভারি ঠিকানা (বাড়ি/রোড) *</label>
+<textarea id="custAddress" placeholder="বাড়ি নং, রোড নং, ব্লক/সেক্টর" required></textarea>
 </div>
+
 <!-- District -->
 <div class="form-group">
-<label>District *</label>
+<label>জেলা *</label>
 <select id="custDistrict" required onchange="loadThanas()">
-<option value="">Select District</option>
-<option value="Dhaka">Dhaka</option>
-<option value="Chittagong">Chittagong</option>
-<option value="Gaibandha">Gaibandha</option>
-<option value="Sylhet">Sylhet</option>
-<option value="Rajshahi">Rajshahi</option>
-<option value="Khulna">Khulna</option>
-<option value="Barisal">Barisal</option>
-<option value="Rangpur">Rangpur</option>
-<option value="Mymensingh">Mymensingh</option>
+<option value="">জেলা নির্বাচন করুন</option>
+<option value="ঢাকা">ঢাকা</option>
+<option value="চট্টগ্রাম">চট্টগ্রাম</option>
+<option value="গাইবান্ধা">গাইবান্ধা</option>
+<!-- বাকি জেলাগুলো locations.js থেকে লোড হবে -->
 </select>
 </div>
+
 <!-- Thana/Upazila -->
 <div class="form-group">
-<label>Thana/Upazila *</label>
-<select id="custThana" required onchange="loadAreas()">
-<option value="">First Select District</option>
+<label>থানা/উপজেলা *</label>
+<select id="custThana" required onchange="loadUnions()">
+<option value="">প্রথমে জেলা নির্বাচন করুন</option>
 </select>
 </div>
-<!-- Area/Zone/Ward -->
+
+<!-- Union/Area -->
 <div class="form-group">
-<label>Area/Zone/Ward</label>
-<select id="custArea">
-<option value="">First Select Thana</option>
+<label>ইউনিয়ন/এলাকা *</label>
+<select id="custUnion" required>
+<option value="">প্রথমে থানা নির্বাচন করুন</option>
 </select>
-<span class="form-hint">Optional - For specific area/sector/ward</span>
 </div>
+
 <div class="form-group">
-<label>Postal Code</label>
+<label>পোস্টাল কোড</label>
 <input type="text" id="custPostal" placeholder="1200">
 </div>
 </div>
 </div>
+
+<!-- Delivery Options -->
+<div class="form-section">
+<h3 class="section-title">
+<i class="fas fa-truck"></i> ডেলিভারি অপশন
+</h3>
+<div class="delivery-options">
+<label class="delivery-option regular selected">
+<input type="radio" name="delivery" value="regular" checked onchange="updateDeliveryCharge()">
+<i class="fas fa-shipping-fast"></i>
+<div>
+<div>রেগুলার ডেলিভারি</div>
+<div style="font-size: 12px; color: var(--gray);">৩-৫ কর্মদিবস</div>
+</div>
+<div style="font-weight: 600;">৳60</div>
+</label>
+
+<label class="delivery-option express">
+<input type="radio" name="delivery" value="express" onchange="updateDeliveryCharge()">
+<i class="fas fa-rocket"></i>
+<div>
+<div>এক্সপ্রেস ডেলিভারি</div>
+<div style="font-size: 12px; color: var(--gray);">১-২ কর্মদিবস</div>
+</div>
+<div style="font-weight: 600; color: var(--danger);">৳110</div>
+</label>
+</div>
+
+<!-- SMS/WhatsApp Notification -->
+<div style="margin-top: 15px; padding: 15px; background: #f0fdf4; border-radius: 10px;">
+<label style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
+<input type="checkbox" id="smsNotification" checked>
+<span><i class="fas fa-bell" style="color: var(--success);"></i> ডেলিভারি ম্যান ট্র্যাকিং (SMS/WhatsApp নোটিফিকেশন)</span>
+</label>
+<p style="font-size: 12px; color: var(--gray); margin-top: 8px;">
+অর্ডার কনফার্মেশন এবং ডেলিভারি আপডেট SMS/WhatsApp এ পাবেন
+</p>
+</div>
+</div>
+
+<!-- Coupon Code -->
+<div class="form-section">
+<h3 class="section-title">
+<i class="fas fa-tag"></i> কুপন কোড
+</h3>
+<div class="coupon-section">
+<div class="coupon-input-group">
+<input type="text" id="couponCode" placeholder="কুপন কোড লিখুন (যেমন: LIPON20)">
+<button onclick="applyCoupon()">প্রয়োগ করুন</button>
+</div>
+<div id="couponMessage" class="coupon-message"></div>
+</div>
+</div>
+
+<!-- Eyeglass Customization (If product is eyeglass) -->
+<div class="form-section" id="eyeglassSection" style="display: none;">
+<h3 class="section-title">
+<i class="fas fa-glasses"></i> চশমার কাস্টমাইজেশন
+</h3>
+
+<!-- Prescription Upload -->
+<div class="prescription-upload">
+<label><strong>চোখের প্রেসক্রিপশন আপলোড করুন</strong></label>
+<input type="file" id="prescriptionFile" accept="image/*,.pdf" onchange="handlePrescriptionUpload()">
+<span class="form-hint">JPG, PNG বা PDF ফরম্যাট (সর্বোচ্চ 5MB)</span>
+</div>
+
+<!-- Frame Size -->
+<div>
+<label><strong>ফ্রেম সাইজ নির্বাচন করুন</strong></label>
+<div class="frame-size-selector">
+<div class="size-option" onclick="selectFrameSize('S', this)">S (Small)</div>
+<div class="size-option" onclick="selectFrameSize('M', this)">M (Medium)</div>
+<div class="size-option" onclick="selectFrameSize('L', this)">L (Large)</div>
+<div class="size-option" onclick="selectFrameSize('XL', this)">XL (Extra Large)</div>
+</div>
+</div>
+
+<!-- Lens Type -->
+<div>
+<label><strong>লেন্স টাইপ নির্বাচন করুন</strong></label>
+<div class="lens-type-selector">
+<div class="lens-option" onclick="selectLensType('Single Vision', this)">Single Vision</div>
+<div class="lens-option" onclick="selectLensType('Bifocal', this)">Bifocal</div>
+<div class="lens-option" onclick="selectLensType('Progressive', this)">Progressive</div>
+</div>
+</div>
+
+<!-- Add-on Options -->
+<div>
+<label><strong>অ্যাড-অন অপশন</strong></label>
+<div class="addon-options">
+<label class="addon-option">
+<input type="checkbox" value="anti-glare" onchange="updateAddons()">
+<span>Anti-Glare Coating (+৳200)</span>
+</label>
+<label class="addon-option">
+<input type="checkbox" value="blue-cut" onchange="updateAddons()">
+<span>Blue Cut Filter (+৳300)</span>
+</label>
+<label class="addon-option">
+<input type="checkbox" value="photochromic" onchange="updateAddons()">
+<span>Photochromic (+৳500)</span>
+</label>
+<label class="addon-option">
+<input type="checkbox" value="scratch-resistant" onchange="updateAddons()">
+<span>Scratch Resistant (+৳150)</span>
+</label>
+</div>
+</div>
+</div>
+
 <!-- Payment Method -->
 <div class="form-section">
 <h3 class="section-title">
-<i class="fas fa-credit-card"></i> Payment Method
+<i class="fas fa-credit-card"></i> পেমেন্ট পদ্ধতি
 </h3>
 <div class="payment-methods">
 <label class="payment-option cod selected">
 <input type="radio" name="payment" value="cod" checked>
 <i class="fas fa-money-bill-wave"></i>
-<span>Cash on Delivery</span>
+<span>ক্যাশ অন ডেলিভারি</span>
 </label>
 <label class="payment-option bkash">
 <input type="radio" name="payment" value="bkash">
@@ -592,108 +866,231 @@ font-size: 14px;
 <span>bKash</span>
 </label>
 <div class="payment-details" id="bkashDetails">
-<p><strong>Send Money to:</strong> <code>01748048267</code></p>
-<p><strong>Account Type:</strong> Personal</p>
-<p><strong>Reference:</strong> LiponShop</p>
+<p><strong>পাঠান এই নম্বরে:</strong> <code>01748048267</code></p>
+<p><strong>অ্যাকাউন্ট টাইপ:</strong> পার্সোনাল</p>
+<p><strong>রেফারেন্স:</strong> LiponShop</p>
 <div class="form-group" style="margin-top:10px;">
-<label>Transaction ID *</label>
-<input type="text" id="bkashTrx" placeholder="Enter 10-digit TrxID">
+<label>ট্রানজেকশন আইডি *</label>
+<input type="text" id="bkashTrx" placeholder="10 ডিজিটের TrxID লিখুন">
 </div>
 </div>
 </div>
 </div>
+
 <!-- Order Notes -->
 <div class="form-section">
 <h3 class="section-title">
-<i class="fas fa-sticky-note"></i> Order Notes (Optional)
+<i class="fas fa-sticky-note"></i> অর্ডার নোট (ঐচ্ছিক)
 </h3>
 <div class="form-group">
-<textarea id="orderNotes" placeholder="Any special instructions for delivery?"></textarea>
+<textarea id="orderNotes" placeholder="ডেলিভারির জন্য কোনো বিশেষ নির্দেশনা?"></textarea>
 </div>
 </div>
+
 </div>
-<!-- Right: Order Summary -->
+
+<!-- Order Summary -->
 <div class="order-summary">
 <h3 class="summary-title">
-<i class="fas fa-receipt"></i> Order Summary
+<i class="fas fa-receipt"></i> অর্ডার সারাংশ
 </h3>
 <div class="cart-items" id="checkoutItems"></div>
+
 <div class="summary-row">
-<span>Subtotal</span>
+<span>সাবটোটাল</span>
 <span id="summarySubtotal">৳0</span>
 </div>
 <div class="summary-row">
-<span>Delivery Charge</span>
+<span>ডেলিভারি চার্জ</span>
 <span id="summaryDelivery">৳60</span>
 </div>
-<div class="summary-row">
-<span>Discount</span>
+<div class="summary-row" id="addonRow" style="display: none;">
+<span>অ্যাড-অন</span>
+<span id="summaryAddons">৳0</span>
+</div>
+<div class="summary-row" id="discountRow" style="display: none;">
+<span>ডিসকাউন্ট</span>
 <span id="summaryDiscount">-৳0</span>
 </div>
 <div class="summary-row total">
-<span>Total</span>
+<span>মোট</span>
 <span>৳<span id="summaryTotal">0</span></span>
 </div>
+
 <div class="delivery-note">
-<i class="fas fa-truck"></i> Free delivery on orders over ৳1000 inside Gaibandha
+<i class="fas fa-truck"></i> গাইবান্ধার ভেতরে ৳1000 এর উপরে অর্ডারে ফ্রি ডেলিভারি
 </div>
+
 <button class="place-order-btn" id="placeOrderBtn" onclick="placeOrder()">
-<i class="fas fa-lock"></i> Place Order - <span id="btnTotal">৳0</span>
+<i class="fas fa-lock"></i> অর্ডার করুন - <span id="btnTotal">৳0</span>
 </button>
+
+<!-- WhatsApp Order Button (Place Order বাটনের নিচে) -->
+<button class="whatsapp-btn" onclick="orderViaWhatsApp()">
+    <i class="fab fa-whatsapp"></i> WhatsApp এ অর্ডার করুন
+</button>
+
 <div class="security-badges">
 <div style="text-align: center;">
 <i class="fas fa-shield-alt"></i>
-<span>Secure Checkout</span>
+<span>নিরাপদ চেকআউট</span>
 </div>
 <div style="text-align: center;">
 <i class="fas fa-undo"></i>
-<span>7 Days Return</span>
+<span>7 দিনের রিটার্ন</span>
 </div>
 </div>
 </div>
 </div>
-<!-- Bottom Navigation -->
-<nav class="bottom-nav">
-<a href="index.html" class="nav-item">
-<i class="fas fa-home"></i>
-<span>Home</span>
-</a>
-<a href="#" class="nav-item" onclick="alert('Coming Soon!'); return false;">
-<i class="fas fa-comment-alt"></i>
-<span>Message</span>
-<span class="nav-badge">3</span>
-</a>
-<a href="customer-login.html" class="nav-item" id="navAccount">
-<i class="fas fa-user"></i>
-<span>Account</span>
-</a>
-<a href="cart.html" class="nav-item">
-<i class="fas fa-shopping-cart"></i>
-<span>Cart</span>
-<span class="nav-badge" id="bottomCartCount">0</span>
-</a>
-</nav>
+
 <!-- Success Modal -->
 <div class="modal" id="successModal">
 <div class="modal-content">
 <div class="modal-icon">
 <i class="fas fa-check"></i>
 </div>
-<h3>🎉 Order Placed Successfully!</h3>
-<p>Thank you for shopping with LiponShop</p>
+<h3>🎉 অর্ডার সফলভাবে সম্পন্ন হয়েছে!</h3>
+<p>LiponShop এ কেনাকাটা করার জন্য ধন্যবাদ</p>
 <div class="order-id">
-Order ID: <span id="modalOrderId">#ORD-XXXX</span>
+অর্ডার আইডি: <span id="modalOrderId">#ORD-XXXX</span>
 </div>
 <p style="font-size:13px;">
-<i class="fas fa-info-circle"></i> 
-We will call you shortly to confirm your order.
+<i class="fas fa-info-circle"></i>
+আপনার অর্ডার কনফার্ম করতে আমরা শীঘ্রই কল করব।
 </p>
-<button class="modal-btn" onclick="goToHome()">Continue Shopping</button>
+<p style="font-size:13px;">
+<i class="fas fa-sms"></i>
+SMS/WhatsApp এ ট্র্যাকিং লিংক পাঠানো হয়েছে।
+</p>
+<button class="modal-btn" onclick="goToHome()">কেনাকাটা চালিয়ে যান</button>
+<button class="modal-btn" onclick="trackOrder()" style="background: var(--secondary); margin-top: 10px;">
+<i class="fas fa-truck"></i> অর্ডার ট্র্যাক করুন
+</button>
 </div>
 </div>
+
 <script src="js/products.js"></script>
 <script src="js/cart.js"></script>
+<script src="js/locations.js"></script>
 <script>
+    /* ==============================
+   WISHLIST FUNCTIONS (index.html)
+   ============================== */
+function toggleWishlist(productId) {
+    let wishlist = JSON.parse(localStorage.getItem('wishlist')) || [];
+    const index = wishlist.indexOf(productId);
+    if (index === -1) {
+        wishlist.push(productId);
+        alert('✅ Wishlist এ যুক্ত হয়েছে!');
+    } else {
+        wishlist.splice(index, 1);
+        alert('❌ Wishlist থেকে সরানো হয়েছে!');
+    }
+    localStorage.setItem('wishlist', JSON.stringify(wishlist));
+    updateWishlistCount();
+    // Re-render products to update heart icon color
+    if(typeof renderProducts === 'function') renderProducts();
+}
+
+function updateWishlistCount() {
+    const wishlist = JSON.parse(localStorage.getItem('wishlist')) || [];
+    const countEl = document.getElementById('wishlistCount');
+    if(countEl) countEl.textContent = wishlist.length;
+}
+
+function openWishlistModal() {
+    const modal = document.getElementById('wishlistModal');
+    const container = document.getElementById('wishlistItems');
+    const wishlist = JSON.parse(localStorage.getItem('wishlist')) || [];
+    const products = JSON.parse(localStorage.getItem('products')) || [];
+    
+    container.innerHTML = '';
+    if (wishlist.length === 0) {
+        container.innerHTML = '<p>Wishlist খালি!</p>';
+    } else {
+        wishlist.forEach(id => {
+            const product = products.find(p => p.id === id);
+            if (product) {
+                container.innerHTML += `
+                    <div style="display:flex; gap:10px; margin-bottom:10px; border-bottom:1px solid #eee; padding-bottom:10px;">
+                        <img src="${product.img}" style="width:50px; height:50px; object-fit:cover;">
+                        <div style="flex:1; text-align:left;">
+                            <p style="font-weight:600;">${product.name}</p>
+                            <p style="color:var(--primary);">৳${product.price}</p>
+                        </div>
+                        <button onclick="addToCart(${product.id}); toggleWishlist(${product.id}); closeWishlistModal();" 
+                                style="background:var(--primary); color:white; border:none; padding:5px 10px; border-radius:5px; cursor:pointer;">
+                            Cart এ নিন
+                        </button>
+                    </div>
+                `;
+            }
+        });
+    }
+    modal.style.display = 'block';
+}
+
+function closeWishlistModal() {
+    document.getElementById('wishlistModal').style.display = 'none';
+}
+
+/* ==============================
+   PD GUIDE FUNCTIONS (index.html)
+   ============================== */
+function openPdModal() {
+    document.getElementById('pdModal').style.display = 'block';
+}
+function closePdModal() {
+    document.getElementById('pdModal').style.display = 'none';
+}
+
+/* ==============================
+   WHATSAPP ORDER FUNCTIONS (checkout.html)
+   ============================== */
+function orderViaWhatsApp() {
+    // Form Values
+    const name = document.getElementById('custName').value.trim();
+    const phone = document.getElementById('custPhone').value.trim();
+    const address = document.getElementById('custAddress').value.trim();
+    const district = document.getElementById('custDistrict').value;
+    
+    if (!name || !phone || !address) {
+        alert('অনুগ্রহ করে নাম, মোবাইল এবং ঠিকানা পূরণ করুন!');
+        return;
+    }
+
+    // Cart Items
+    const cart = JSON.parse(localStorage.getItem('cart')) || [];
+    const products = JSON.parse(localStorage.getItem('products')) || [];
+    let message = `হ্যালো LiponShop! আমি অর্ডার করতে চাই:\n\n👤 নাম: ${name}\n📱 মোবাইল: ${phone}\n📍 ঠিকানা: ${address}, ${district}\n\n🛒 অর্ডার:\n`;
+
+    cart.forEach(item => {
+        const product = products.find(p => p.id === item.id);
+        message += `- ${product.name} × ${item.quantity} (৳${product.price})\n`;
+    });
+
+    const total = document.getElementById('summaryTotal').innerText;
+    message += `\n💰 মোট: ${total}\n\nদয়া করে অর্ডারটি কনফার্ম করুন।`;
+
+    // Your WhatsApp Number
+    const whatsappNumber = "8801748048267"; 
+    const url = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
+    window.open(url, '_blank');
+}
+
+// Initialize Wishlist Count on Load
+document.addEventListener('DOMContentLoaded', () => {
+    updateWishlistCount();
+});
+// ==============================
+// GLOBAL VARIABLES
+// ==============================
+let selectedFrameSize = '';
+let selectedLensType = '';
+let addonTotal = 0;
+let discountTotal = 0;
+let deliveryCharge = 60;
+
 // ==============================
 // CHECKOUT LOGIC
 // ==============================
@@ -704,21 +1101,38 @@ window.location.href = 'cart.html';
 return;
 }
 loadCheckoutItems();
+checkEyeglassProducts();
 updateSummary();
 setupPaymentHandlers();
-updateCartCount();
 });
 
-// Update Cart Count
-function updateCartCount() {
-const cart = JSON.parse(localStorage.getItem('cart')) || [];
-const count = cart.reduce((sum, item) => sum + item.quantity, 0);
-const bottomCartCount = document.getElementById('bottomCartCount');
-if (bottomCartCount) {
-bottomCartCount.textContent = count;
+// Toggle Guest Checkout
+function toggleGuestCheckout() {
+const isGuest = document.getElementById('guestCheckout').checked;
+const emailField = document.getElementById('custEmail');
+if (isGuest) {
+emailField.required = false;
+emailField.placeholder = 'ঐচ্ছিক (অর্ডার আপডেটের জন্য)';
+} else {
+emailField.required = true;
+emailField.placeholder = 'your@email.com';
 }
 }
 
+// Check if cart has eyeglass products
+function checkEyeglassProducts() {
+const cart = JSON.parse(localStorage.getItem('cart')) || [];
+const products = JSON.parse(localStorage.getItem('products')) || [];
+const hasEyeglass = cart.some(item => {
+const product = products.find(p => p.id === item.id);
+return product && (product.category === 'Sunglass' || product.category === 'Frame');
+});
+if (hasEyeglass) {
+document.getElementById('eyeglassSection').style.display = 'block';
+}
+}
+
+// Load Checkout Items
 function loadCheckoutItems() {
 const container = document.getElementById('checkoutItems');
 const cart = JSON.parse(localStorage.getItem('cart')) || [];
@@ -733,32 +1147,134 @@ div.innerHTML = `
 <div class="cart-item-info">
 <p class="cart-item-name">${product.name}</p>
 <p class="cart-item-price">৳${product.price} × ${item.quantity}</p>
-<p class="cart-item-qty">Subtotal: ৳${product.price * item.quantity}</p>
+<p class="cart-item-qty">সাবটোটাল: ৳${product.price * item.quantity}</p>
 </div>
 `;
 container.appendChild(div);
 });
 }
 
-function updateSummary() {
+// Update Delivery Charge
+function updateDeliveryCharge() {
+const deliveryType = document.querySelector('input[name="delivery"]:checked').value;
+deliveryCharge = deliveryType === 'express' ? 110 : 60;
+
+// Update UI
+document.querySelectorAll('.delivery-option').forEach(opt => {
+opt.classList.remove('selected');
+});
+document.querySelector(`input[name="delivery"][value="${deliveryType}"]`).closest('.delivery-option').classList.add('selected');
+
+updateSummary();
+}
+
+// Apply Coupon Code
+function applyCoupon() {
+const couponCode = document.getElementById('couponCode').value.trim().toUpperCase();
+const messageEl = document.getElementById('couponMessage');
+
+// Valid coupon codes
+const validCoupons = {
+'LIPON20': 20,
+'LIPON10': 10,
+'WELCOME15': 15,
+'NEWUSER25': 25
+};
+
+if (validCoupons[couponCode]) {
+const subtotal = calculateSubtotal();
+discountTotal = (subtotal * validCoupons[couponCode]) / 100;
+messageEl.textContent = `✅ ${couponCode} প্রয়োগ হয়েছে! ${validCoupons[couponCode]}% ডিসকাউন্ট`;
+messageEl.className = 'coupon-message success';
+document.getElementById('discountRow').style.display = 'flex';
+updateSummary();
+} else {
+discountTotal = 0;
+messageEl.textContent = '❌ অবৈধ কুপন কোড';
+messageEl.className = 'coupon-message error';
+document.getElementById('discountRow').style.display = 'none';
+updateSummary();
+}
+}
+
+// Handle Prescription Upload
+function handlePrescriptionUpload() {
+const fileInput = document.getElementById('prescriptionFile');
+const file = fileInput.files[0];
+if (file) {
+if (file.size > 5 * 1024 * 1024) {
+alert('ফাইল সাইজ 5MB এর বেশি হতে পারবে না!');
+fileInput.value = '';
+return;
+}
+// In production, upload to server here
+console.log('Prescription uploaded:', file.name);
+}
+}
+
+// Select Frame Size
+function selectFrameSize(size, element) {
+selectedFrameSize = size;
+document.querySelectorAll('.size-option').forEach(opt => opt.classList.remove('selected'));
+element.classList.add('selected');
+}
+
+// Select Lens Type
+function selectLensType(type, element) {
+selectedLensType = type;
+document.querySelectorAll('.lens-option').forEach(opt => opt.classList.remove('selected'));
+element.classList.add('selected');
+}
+
+// Update Addons
+function updateAddons() {
+const addons = document.querySelectorAll('.addon-option input:checked');
+addonTotal = 0;
+addons.forEach(addon => {
+switch(addon.value) {
+case 'anti-glare': addonTotal += 200; break;
+case 'blue-cut': addonTotal += 300; break;
+case 'photochromic': addonTotal += 500; break;
+case 'scratch-resistant': addonTotal += 150; break;
+}
+});
+document.getElementById('addonRow').style.display = addonTotal > 0 ? 'flex' : 'none';
+updateSummary();
+}
+
+// Calculate Subtotal
+function calculateSubtotal() {
 const cart = JSON.parse(localStorage.getItem('cart')) || [];
 const products = JSON.parse(localStorage.getItem('products')) || [];
-const subtotal = cart.reduce((sum, item) => {
+return cart.reduce((sum, item) => {
 const product = products.find(p => p.id === item.id);
 return sum + (product?.price || 0) * item.quantity;
 }, 0);
-const district = document.getElementById('custDistrict')?.value;
-let deliveryCharge = (district === 'Gaibandha' && subtotal >= 1000) ? 0 : 60;
-const discount = 0;
-const total = subtotal + deliveryCharge - discount;
-document.getElementById('summarySubtotal').innerText = '৳' + subtotal.toLocaleString('en-BD');
-document.getElementById('summaryDelivery').innerText = '৳' + deliveryCharge;
-document.getElementById('summaryDiscount').innerText = '-৳' + discount;
-document.getElementById('summaryTotal').innerText = total.toLocaleString('en-BD');
-document.getElementById('btnTotal').innerText = '৳' + total.toLocaleString('en-BD');
-return { subtotal, deliveryCharge, discount, total };
 }
 
+// Update Summary
+function updateSummary() {
+const subtotal = calculateSubtotal();
+const district = document.getElementById('custDistrict')?.value;
+
+// Free delivery for Gaibandha orders over 1000
+if (district === 'গাইবান্ধা' && subtotal >= 1000) {
+deliveryCharge = 0;
+}
+
+const total = subtotal + deliveryCharge + addonTotal - discountTotal;
+
+document.getElementById('summarySubtotal').innerText = '৳' + subtotal.toLocaleString('en-BD');
+document.getElementById('summaryDelivery').innerText = '৳' + deliveryCharge.toLocaleString('en-BD');
+document.getElementById('summaryAddons').innerText = '৳' + addonTotal.toLocaleString('en-BD');
+document.getElementById('summaryDiscount').innerText = '-৳' + discountTotal.toLocaleString('en-BD');
+document.getElementById('summaryTotal').innerText = total.toLocaleString('en-BD');
+document.getElementById('btnTotal').innerText = '৳' + total.toLocaleString('en-BD');
+
+return { subtotal, deliveryCharge, addonTotal, discountTotal, total };
+}
+
+// Setup Payment Handlers
 function setupPaymentHandlers() {
 const paymentOptions = document.querySelectorAll('.payment-option');
 const paymentInputs = document.querySelectorAll('input[name="payment"]');
@@ -779,31 +1295,55 @@ districtSelect.addEventListener('change', updateSummary);
 }
 }
 
+// Place Order
 function placeOrder() {
+// Validation
 const name = document.getElementById('custName').value.trim();
 const phone = document.getElementById('custPhone').value.trim();
 const address = document.getElementById('custAddress').value.trim();
 const district = document.getElementById('custDistrict').value;
-if (!name || !phone || !address || !district) {
-alert('Please fill all required fields! (*)');
+const thana = document.getElementById('custThana').value;
+const union = document.getElementById('custUnion').value;
+
+if (!name || !phone || !address || !district || !thana || !union) {
+alert('অনুগ্রহ করে সব প্রয়োজনীয় ফিল্ড পূরণ করুন! (*)');
 return;
 }
+
 const phoneRegex = /^01[3-9][0-9]{8}$/;
 if (!phoneRegex.test(phone)) {
-alert('Please enter a valid Bangladesh phone number (e.g., 01712345678)');
+alert('অনুগ্রহ করে একটি বৈধ বাংলাদেশি মোবাইল নম্বর দিন (যেমন: 01712345678)');
 return;
 }
+
+// Eyeglass validation
+const eyeglassSection = document.getElementById('eyeglassSection');
+if (eyeglassSection.style.display === 'block') {
+if (!selectedFrameSize) {
+alert('অনুগ্রহ করে ফ্রেম সাইজ নির্বাচন করুন!');
+return;
+}
+if (!selectedLensType) {
+alert('অনুগ্রহ করে লেন্স টাইপ নির্বাচন করুন!');
+return;
+}
+}
+
 const paymentMethod = document.querySelector('input[name="payment"]:checked').value;
 if (paymentMethod === 'bkash') {
 const trx = document.getElementById('bkashTrx').value.trim();
 if (!trx || trx.length < 10) {
-alert('Please enter valid bKash Transaction ID');
+alert('অনুগ্রহ করে বৈধ bKash ট্রানজেকশন আইডি দিন');
 return;
 }
 }
+
+// Disable button
 const btn = document.getElementById('placeOrderBtn');
 btn.disabled = true;
-btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> প্রসেসিং হচ্ছে...';
+
+// Prepare order data
 const cart = JSON.parse(localStorage.getItem('cart')) || [];
 const products = JSON.parse(localStorage.getItem('products')) || [];
 const orderItems = cart.map(item => {
@@ -816,111 +1356,94 @@ img: product ? product.img : 'https://via.placeholder.com/200?text=No+Image',
 quantity: item.quantity
 };
 });
+
 const { total } = updateSummary();
 const orderId = 'ORD-' + Date.now().toString().slice(-6);
+const isGuest = document.getElementById('guestCheckout').checked;
+const smsNotification = document.getElementById('smsNotification').checked;
+
 const orderData = {
 id: orderId,
 customer: name,
-customerEmail: localStorage.getItem('customerEmail') || '',
+customerEmail: localStorage.getItem('customerEmail') || document.getElementById('custEmail').value,
 phone: phone,
 address: address,
 district: district,
+thana: thana,
+union: union,
 postal: document.getElementById('custPostal').value,
 payment: paymentMethod,
-paymentTrx: paymentMethod === 'cod' ? null : (paymentMethod === 'bkash' ? document.getElementById('bkashTrx').value : null),
+paymentTrx: paymentMethod === 'cod' ? null :
+(paymentMethod === 'bkash' ? document.getElementById('bkashTrx').value : null),
 items: orderItems,
+subtotal: calculateSubtotal(),
+deliveryCharge: deliveryCharge,
+addonTotal: addonTotal,
+discountTotal: discountTotal,
 total: total,
 status: 'pending',
+deliveryType: document.querySelector('input[name="delivery"]:checked').value,
+smsNotification: smsNotification,
+isGuest: isGuest,
+eyeglass: eyeglassSection.style.display === 'block' ? {
+frameSize: selectedFrameSize,
+lensType: selectedLensType,
+prescriptionUploaded: document.getElementById('prescriptionFile').files.length > 0,
+addons: Array.from(document.querySelectorAll('.addon-option input:checked')).map(cb => cb.value)
+} : null,
 date: new Date().toISOString(),
 notes: document.getElementById('orderNotes').value,
 referrer: localStorage.getItem('currentReferrer')
 };
+
+// Save order
 const orders = JSON.parse(localStorage.getItem('orders')) || [];
 orders.push(orderData);
 localStorage.setItem('orders', JSON.stringify(orders));
-if (orderData.referrer) {
-processResellerCommission(orderData.referrer, total * 0.10, orderId);
+
+// Save to guest orders if guest checkout
+if (isGuest) {
+const guestOrders = JSON.parse(localStorage.getItem('guestOrders')) || [];
+guestOrders.push(orderData);
+localStorage.setItem('guestOrders', JSON.stringify(guestOrders));
 }
+
+// Process reseller commission if exists
+if (orderData.referrer) {
+const currentProfit = parseFloat(localStorage.getItem('resellerProfit')) || 0;
+localStorage.setItem('resellerProfit', (currentProfit + total * 0.10).toFixed(2));
+}
+
+// Send SMS/WhatsApp notification (In production, call API here)
+if (smsNotification) {
+console.log('Sending SMS/WhatsApp to:', phone);
+// Example: sendSMS(phone, `আপনার অর্ডার ${orderId} কনফার্ম হয়েছে! ট্র্যাক করুন: liponshop.com/track/${orderId}`);
+}
+
+// Clear cart
 localStorage.removeItem('cart');
 localStorage.removeItem('currentReferrer');
 localStorage.removeItem('refProduct');
+
+// Show success modal
 setTimeout(() => {
 document.getElementById('modalOrderId').innerText = orderId;
 document.getElementById('successModal').classList.add('show');
+if (typeof updateCartCount === 'function') {
 updateCartCount();
+}
 }, 1500);
 }
 
-function processResellerCommission(resellerId, commission, orderId) {
-const currentProfit = parseFloat(localStorage.getItem('resellerProfit')) || 0;
-const newProfit = currentProfit + commission;
-localStorage.setItem('resellerProfit', newProfit.toFixed(2));
-const logs = JSON.parse(localStorage.getItem('commissionLogs')) || [];
-logs.push({ resellerId, amount: commission.toFixed(2), orderId, date: new Date().toISOString() });
-localStorage.setItem('commissionLogs', JSON.stringify(logs));
+// Track Order
+function trackOrder() {
+const orderId = document.getElementById('modalOrderId').innerText;
+window.location.href = `track-order.html?id=${orderId}`;
 }
 
+// Go to Home
 function goToHome() {
 window.location.href = 'index.html';
-}
-
-// Location Data
-const locationData = {
-"Dhaka": {
-"Dhaka Sadar": { "areas": ["Motijheel", "Dilkusha", "Bangshal"] },
-"Mirpur": { "areas": ["Mirpur-1", "Mirpur-10", "Mirpur DOHS"] },
-"Uttara": { "areas": ["Uttara Sector 1", "Uttara Sector 7"] }
-},
-"Gaibandha": {
-"Gaibandha Sadar": { "areas": ["Gaibandha Paurashava", "Sadar Road", "Bonarpara Bazar"] }
-}
-};
-
-const districtThanaData = {
-"Dhaka": ["Dhaka Sadar", "Mirpur", "Uttara", "Gulshan", "Dhanmondi"],
-"Gaibandha": ["Gaibandha Sadar", "Gobindaganj", "Palashbari", "Saghata"],
-"Chittagong": ["Chittagong Sadar", "Panchlaish", "Khulshi"],
-"Sylhet": ["Sylhet Sadar", "Companiganj", "Gowainghat"]
-};
-
-function loadThanas() {
-const districtSelect = document.getElementById('custDistrict');
-const thanaSelect = document.getElementById('custThana');
-const areaSelect = document.getElementById('custArea');
-const selectedDistrict = districtSelect.value;
-thanaSelect.innerHTML = '<option value="">Select Thana/Upazila</option>';
-areaSelect.innerHTML = '<option value="">First Select Thana</option>';
-areaSelect.disabled = true;
-if (selectedDistrict && districtThanaData[selectedDistrict]) {
-districtThanaData[selectedDistrict].forEach(thana => {
-const option = document.createElement('option');
-option.value = thana;
-option.textContent = thana;
-thanaSelect.appendChild(option);
-});
-thanaSelect.disabled = false;
-}
-}
-
-function loadAreas() {
-const districtSelect = document.getElementById('custDistrict');
-const thanaSelect = document.getElementById('custThana');
-const areaSelect = document.getElementById('custArea');
-const selectedDistrict = districtSelect.value;
-const selectedThana = thanaSelect.value;
-areaSelect.innerHTML = '<option value="">Select Area/Zone/Ward</option>';
-if (selectedDistrict && selectedThana && locationData[selectedDistrict]) {
-const districtData = locationData[selectedDistrict];
-if (districtData[selectedThana] && districtData[selectedThana].areas) {
-districtData[selectedThana].areas.forEach(area => {
-const option = document.createElement('option');
-option.value = area;
-option.textContent = area;
-areaSelect.appendChild(option);
-});
-areaSelect.disabled = false;
-}
-}
 }
 </script>
 </body>
