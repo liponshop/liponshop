@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Popup Offers - LiponShop Admin</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        :root {
+            --primary: #4f46e5;
+            --primary-dark: #4338ca;
+            --secondary: #f59e0b;
+            --success: #10b981;
+            --danger: #ef4444;
+            --dark: #1f2937;
+            --light: #f9fafb;
+            --gray: #6b7280;
+            --border: #e5e7eb;
+        }
+
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            animation: slideUp 0.5s ease;
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .page-header {
+            background: white;
+            padding: 25px 30px;
+            border-radius: 16px;
+            margin-bottom: 25px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .page-title {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .page-title i {
+            font-size: 32px;
+            color: var(--primary);
+        }
+
+        .page-title h1 {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--dark);
+        }
+
+        .btn {
+            padding: 12px 25px;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s;
+            font-size: 14px;
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(79, 70, 229, 0.3);
+        }
+
+        .btn-secondary {
+            background: white;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+        }
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: 450px 1fr;
+            gap: 25px;
+        }
+
+        .form-card {
+            background: white;
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            height: fit-content;
+        }
+
+        .form-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--dark);
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--light);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--dark);
+            margin-bottom: 8px;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            border-color: var(--primary);
+            outline: none;
+            box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.1);
+        }
+
+        .form-hint {
+            font-size: 12px;
+            color: var(--gray);
+            margin-top: 5px;
+        }
+
+        .popup-preview {
+            background: rgba(0,0,0,0.8);
+            border-radius: 20px;
+            padding: 30px;
+            margin-top: 20px;
+            text-align: center;
+            position: relative;
+            min-height: 400px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .popup-preview-content {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            max-width: 400px;
+            width: 100%;
+            animation: slideUp 0.4s ease;
+        }
+
+        .popup-preview-content h2 {
+            font-size: 28px;
+            color: var(--dark);
+            margin-bottom: 15px;
+        }
+
+        .popup-preview-content p {
+            color: var(--gray);
+            margin-bottom: 20px;
+        }
+
+        .popup-code {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 10px;
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+
+        .list-card {
+            background: white;
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+        }
+
+        .offer-item {
+            background: var(--light);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-left: 4px solid var(--primary);
+            transition: all 0.3s;
+        }
+
+        .offer-item:hover {
+            transform: translateX(5px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .offer-info h4 {
+            font-size: 18px;
+            margin-bottom: 8px;
+            color: var(--dark);
+        }
+
+        .offer-info p {
+            font-size: 13px;
+            color: var(--gray);
+            margin-bottom: 5px;
+        }
+
+        .offer-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .action-btn {
+            padding: 8px 15px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.3s;
+        }
+
+        .action-btn.edit {
+            background: #dbeafe;
+            color: var(--primary);
+        }
+
+        .action-btn.edit:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        .action-btn.delete {
+            background: #fee2e2;
+            color: var(--danger);
+        }
+
+        .action-btn.delete:hover {
+            background: var(--danger);
+            color: white;
+        }
+
+        .action-btn.toggle {
+            background: #fef3c7;
+            color: var(--secondary);
+        }
+
+        .action-btn.toggle:hover {
+            background: var(--secondary);
+            color: white;
+        }
+
+        @media (max-width: 900px) {
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <!-- Page Header -->
+    <div class="page-header">
+        <div class="page-title">
+            <i class="fas fa-gift"></i>
+            <h1>Popup Offers Manager</h1>
+        </div>
+        <div style="display: flex; gap: 12px;">
+            <a href="admin-dashboard.html" class="btn btn-secondary">
+                <i class="fas fa-arrow-left"></i> Back to Dashboard
+            </a>
+            <a href="index.html" target="_blank" class="btn btn-primary">
+                <i class="fas fa-eye"></i> View Website
+            </a>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="content-grid">
+        <!-- Add/Edit Form -->
+        <div class="form-card">
+            <h2 class="form-title" id="formTitle">
+                <i class="fas fa-plus-circle"></i> Add New Popup Offer
+            </h2>
+
+            <form id="popupOfferForm">
+                <input type="hidden" id="editIndex">
+
+                <div class="form-group">
+                    <label>Offer Title *</label>
+                    <input type="text" id="offerTitle" placeholder="e.g. 🎉 Special Offer!" required oninput="updatePreview()">
+                </div>
+
+                <div class="form-group">
+                    <label>Offer Description *</label>
+                    <input type="text" id="offerDescription" placeholder="e.g. Get 20% OFF on your first order!" required oninput="updatePreview()">
+                </div>
+
+                <div class="form-group">
+                    <label>Discount Code *</label>
+                    <input type="text" id="offerCode" placeholder="e.g. LIPON20" required oninput="updatePreview()" style="text-transform: uppercase;">
+                </div>
+
+                <div class="form-group">
+                    <label>Discount Percentage (%) *</label>
+                    <input type="number" id="offerDiscount" placeholder="e.g. 20" min="1" max="100" required oninput="updatePreview()">
+                </div>
+
+                <div class="form-group">
+                    <label>Button Text</label>
+                    <input type="text" id="offerButtonText" placeholder="e.g. Shop Now" value="Shop Now" oninput="updatePreview()">
+                </div>
+
+                <div class="form-group">
+                    <label>Button Link</label>
+                    <input type="text" id="offerButtonLink" placeholder="e.g. #products" value="#products">
+                </div>
+
+                <div class="form-group">
+                    <label>Popup Icon (Emoji)</label>
+                    <input type="text" id="offerIcon" placeholder="e.g. 🎁, 🎉, 🔥" value="🎁" maxlength="2" oninput="updatePreview()">
+                </div>
+
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" id="offerActive" checked>
+                        Active (Show on website)
+                    </label>
+                </div>
+
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" id="showCountdown" checked onchange="toggleCountdown()">
+                        Show Countdown Timer
+                    </label>
+                </div>
+
+                <div class="form-group" id="countdownGroup">
+                    <label>Countdown Hours</label>
+                    <input type="number" id="countdownHours" placeholder="e.g. 24" value="24" min="1">
+                    <div class="form-hint">Popup will show countdown for this many hours</div>
+                </div>
+
+                <!-- Live Preview -->
+                <div class="popup-preview">
+                    <div class="popup-preview-content" id="popupPreview">
+                        <div style="font-size: 80px; margin-bottom: 20px;" id="previewIcon">🎁</div>
+                        <h2 id="previewTitle">🎉 Special Offer!</h2>
+                        <p id="previewDescription">Get 20% OFF on your first order!</p>
+                        <div class="popup-code" id="previewCode">LIPON20</div>
+                        <button class="btn btn-primary" style="width: 100%; margin-bottom: 15px;" id="previewBtn">
+                            Shop Now
+                        </button>
+                        <p style="font-size: 13px; color: var(--danger); font-weight: 600;">
+                            ⏰ Offer ends in: <span id="previewCountdown">23:59:59</span>
+                        </p>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary" style="width: 100%; justify-content: center; margin-top: 20px;">
+                    <i class="fas fa-save"></i>
+                    <span id="submitText">Save Popup Offer</span>
+                </button>
+
+                <button type="button" class="btn btn-secondary" id="cancelEdit" style="width: 100%; justify-content: center; margin-top: 10px; display: none;">
+                    <i class="fas fa-times"></i> Cancel
+                </button>
+            </form>
+        </div>
+
+        <!-- Offers List -->
+        <div class="list-card">
+            <h2 class="form-title">
+                <i class="fas fa-list"></i> All Popup Offers
+            </h2>
+
+            <div id="offersList">
+                <!-- Offers will load here -->
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // ==============================
+    // POPUP OFFER MANAGEMENT SYSTEM
+    // ==============================
+
+    let popupOffers = JSON.parse(localStorage.getItem('popupOffers')) || [
+        {
+            id: 1,
+            title: "🎉 Special Offer!",
+            description: "Get 20% OFF on your first order!",
+            code: "LIPON20",
+            discount: 20,
+            buttonText: "Shop Now",
+            buttonLink: "#products",
+            icon: "🎁",
+            active: true,
+            showCountdown: true,
+            countdownHours: 24,
+            createdAt: new Date().toISOString()
+        }
+    ];
+
+    let editIndex = -1;
+
+    document.addEventListener('DOMContentLoaded', () => {
+        if (localStorage.getItem('adminLogin') !== 'true') {
+            window.location.href = 'admin-login.html';
+            return;
+        }
+        loadOffers();
+        updatePreview();
+    });
+
+    function toggleCountdown() {
+        const showCountdown = document.getElementById('showCountdown').checked;
+        document.getElementById('countdownGroup').style.display = showCountdown ? 'block' : 'none';
+        updatePreview();
+    }
+
+    function updatePreview() {
+        const title = document.getElementById('offerTitle').value || '🎉 Special Offer!';
+        const description = document.getElementById('offerDescription').value || 'Get 20% OFF on your first order!';
+        const code = document.getElementById('offerCode').value || 'LIPON20';
+        const icon = document.getElementById('offerIcon').value || '🎁';
+        const buttonText = document.getElementById('offerButtonText').value || 'Shop Now';
+
+        document.getElementById('previewIcon').textContent = icon;
+        document.getElementById('previewTitle').textContent = title;
+        document.getElementById('previewDescription').textContent = description;
+        document.getElementById('previewCode').textContent = code.toUpperCase();
+        document.getElementById('previewBtn').textContent = buttonText;
+
+        if (document.getElementById('showCountdown').checked) {
+            startPreviewCountdown();
+        }
+    }
+
+    function startPreviewCountdown() {
+        let hours = 23, minutes = 59, seconds = 59;
+        setInterval(() => {
+            if (seconds > 0) {
+                seconds--;
+            } else {
+                if (minutes > 0) {
+                    minutes--;
+                    seconds = 59;
+                } else {
+                    if (hours > 0) {
+                        hours--;
+                        minutes = 59;
+                        seconds = 59;
+                    }
+                }
+            }
+            document.getElementById('previewCountdown').textContent = 
+                `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+        }, 1000);
+    }
+
+    // Form submit
+    document.getElementById('popupOfferForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        const offerData = {
+            id: editIndex >= 0 ? popupOffers[editIndex].id : Date.now(),
+            title: document.getElementById('offerTitle').value,
+            description: document.getElementById('offerDescription').value,
+            code: document.getElementById('offerCode').value.toUpperCase(),
+            discount: parseInt(document.getElementById('offerDiscount').value),
+            buttonText: document.getElementById('offerButtonText').value,
+            buttonLink: document.getElementById('offerButtonLink').value,
+            icon: document.getElementById('offerIcon').value,
+            active: document.getElementById('offerActive').checked,
+            showCountdown: document.getElementById('showCountdown').checked,
+            countdownHours: parseInt(document.getElementById('countdownHours').value) || 24,
+            createdAt: editIndex >= 0 ? popupOffers[editIndex].createdAt : new Date().toISOString()
+        };
+
+        if (editIndex >= 0) {
+            popupOffers[editIndex] = offerData;
+        } else {
+            popupOffers.push(offerData);
+        }
+
+        localStorage.setItem('popupOffers', JSON.stringify(popupOffers));
+        loadOffers();
+        resetForm();
+        alert('Popup offer saved successfully!');
+    });
+
+    // Load offers list
+    function loadOffers() {
+        const container = document.getElementById('offersList');
+        
+        if (popupOffers.length === 0) {
+            container.innerHTML = `
+                <div class="empty-state" style="text-align: center; padding: 60px 20px; color: var(--gray);">
+                    <i class="fas fa-gift" style="font-size: 60px; margin-bottom: 20px; opacity: 0.5;"></i>
+                    <h3>No popup offers yet</h3>
+                    <p>Add your first popup offer to start promoting</p>
+                </div>
+            `;
+            return;
+        }
+
+        container.innerHTML = '';
+        popupOffers.forEach((offer, index) => {
+            const item = document.createElement('div');
+            item.className = 'offer-item';
+            item.innerHTML = `
+                <div class="offer-info">
+                    <h4>${offer.title}</h4>
+                    <p><strong>Code:</strong> ${offer.code} (${offer.discount}% OFF)</p>
+                    <p><strong>Button:</strong> ${offer.buttonText}</p>
+                    ${offer.showCountdown ? `<p><strong>Countdown:</strong> ${offer.countdownHours} hours</p>` : ''}
+                    <span class="badge" style="display: inline-block; padding: 5px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; margin-top: 8px; background: ${offer.active ? '#d1fae5' : '#fee2e2'}; color: ${offer.active ? '#065f46' : '#991b1b'};">
+                        ${offer.active ? '✓ Active' : '✗ Inactive'}
+                    </span>
+                </div>
+                <div class="offer-actions">
+                    <button class="action-btn edit" onclick="editOffer(${index})">
+                        <i class="fas fa-edit"></i> Edit
+                    </button>
+                    <button class="action-btn toggle" onclick="toggleOffer(${index})">
+                        <i class="fas fa-${offer.active ? 'eye-slash' : 'eye'}"></i> 
+                        ${offer.active ? 'Disable' : 'Enable'}
+                    </button>
+                    <button class="action-btn delete" onclick="deleteOffer(${index})">
+                        <i class="fas fa-trash"></i> Delete
+                    </button>
+                </div>
+            `;
+            container.appendChild(item);
+        });
+    }
+
+    function editOffer(index) {
+        const offer = popupOffers[index];
+        editIndex = index;
+
+        document.getElementById('offerTitle').value = offer.title;
+        document.getElementById('offerDescription').value = offer.description;
+        document.getElementById('offerCode').value = offer.code;
+        document.getElementById('offerDiscount').value = offer.discount;
+        document.getElementById('offerButtonText').value = offer.buttonText;
+        document.getElementById('offerButtonLink').value = offer.buttonLink;
+        document.getElementById('offerIcon').value = offer.icon;
+        document.getElementById('offerActive').checked = offer.active;
+        document.getElementById('showCountdown').checked = offer.showCountdown;
+        document.getElementById('countdownHours').value = offer.countdownHours;
+        document.getElementById('countdownGroup').style.display = offer.showCountdown ? 'block' : 'none';
+
+        document.getElementById('formTitle').innerHTML = '<i class="fas fa-edit"></i> Edit Popup Offer';
+        document.getElementById('submitText').textContent = 'Update Popup Offer';
+        document.getElementById('cancelEdit').style.display = 'flex';
+
+        updatePreview();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function toggleOffer(index) {
+        popupOffers[index].active = !popupOffers[index].active;
+        localStorage.setItem('popupOffers', JSON.stringify(popupOffers));
+        loadOffers();
+    }
+
+    function deleteOffer(index) {
+        if (confirm('Are you sure you want to delete this popup offer?')) {
+            popupOffers.splice(index, 1);
+            localStorage.setItem('popupOffers', JSON.stringify(popupOffers));
+            loadOffers();
+        }
+    }
+
+    function resetForm() {
+        document.getElementById('popupOfferForm').reset();
+        editIndex = -1;
+        document.getElementById('formTitle').innerHTML = '<i class="fas fa-plus-circle"></i> Add New Popup Offer';
+        document.getElementById('submitText').textContent = 'Save Popup Offer';
+        document.getElementById('cancelEdit').style.display = 'none';
+        document.getElementById('countdownGroup').style.display = 'block';
+        updatePreview();
+    }
+
+    document.getElementById('cancelEdit').addEventListener('click', resetForm);
+</script>
+
+</body>
+</html>

@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Banners & Offers - LiponShop Admin</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        :root {
+            --primary: #4f46e5;
+            --primary-dark: #4338ca;
+            --secondary: #f59e0b;
+            --success: #10b981;
+            --danger: #ef4444;
+            --dark: #1f2937;
+            --light: #f9fafb;
+            --gray: #6b7280;
+            --border: #e5e7eb;
+        }
+
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            animation: slideUp 0.5s ease;
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .page-header {
+            background: white;
+            padding: 25px 30px;
+            border-radius: 16px;
+            margin-bottom: 25px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .page-title {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .page-title i {
+            font-size: 32px;
+            color: var(--primary);
+        }
+
+        .page-title h1 {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--dark);
+        }
+
+        .btn {
+            padding: 12px 25px;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s;
+            font-size: 14px;
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(79, 70, 229, 0.3);
+        }
+
+        .btn-secondary {
+            background: white;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+        }
+
+        .btn-danger {
+            background: var(--danger);
+            color: white;
+        }
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: 450px 1fr;
+            gap: 25px;
+        }
+
+        .form-card {
+            background: white;
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            height: fit-content;
+        }
+
+        .form-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--dark);
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--light);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--dark);
+            margin-bottom: 8px;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            border-color: var(--primary);
+            outline: none;
+            box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.1);
+        }
+
+        .form-hint {
+            font-size: 12px;
+            color: var(--gray);
+            margin-top: 5px;
+        }
+
+        .banner-preview {
+            background: var(--light);
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
+            text-align: center;
+            min-height: 150px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .banner-preview.live {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .banner-preview h3 {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .banner-preview p {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .countdown-timer {
+            background: rgba(255,255,255,0.2);
+            padding: 10px 20px;
+            border-radius: 8px;
+            margin-top: 15px;
+            font-weight: 600;
+        }
+
+        .list-card {
+            background: white;
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+        }
+
+        .banner-item {
+            background: var(--light);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 15px;
+            display: grid;
+            grid-template-columns: 300px 1fr auto;
+            gap: 20px;
+            align-items: center;
+            border-left: 4px solid var(--primary);
+            transition: all 0.3s;
+        }
+
+        .banner-item:hover {
+            transform: translateX(5px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .banner-item.inactive {
+            opacity: 0.6;
+            border-left-color: var(--gray);
+        }
+
+        .banner-thumb {
+            width: 100%;
+            height: 150px;
+            border-radius: 8px;
+            object-fit: cover;
+            background: white;
+        }
+
+        .banner-info h4 {
+            font-size: 18px;
+            margin-bottom: 8px;
+            color: var(--dark);
+        }
+
+        .banner-info p {
+            font-size: 13px;
+            color: var(--gray);
+            margin-bottom: 5px;
+        }
+
+        .banner-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-top: 8px;
+        }
+
+        .status-active {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .status-inactive {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .banner-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .action-btn {
+            padding: 8px 15px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.3s;
+        }
+
+        .action-btn.edit {
+            background: #dbeafe;
+            color: var(--primary);
+        }
+
+        .action-btn.edit:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        .action-btn.delete {
+            background: #fee2e2;
+            color: var(--danger);
+        }
+
+        .action-btn.delete:hover {
+            background: var(--danger);
+            color: white;
+        }
+
+        .action-btn.toggle {
+            background: #fef3c7;
+            color: var(--secondary);
+        }
+
+        .action-btn.toggle:hover {
+            background: var(--secondary);
+            color: white;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--gray);
+        }
+
+        .empty-state i {
+            font-size: 60px;
+            margin-bottom: 20px;
+            opacity: 0.5;
+        }
+
+        @media (max-width: 1024px) {
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+            .banner-item {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <!-- Page Header -->
+    <div class="page-header">
+        <div class="page-title">
+            <i class="fas fa-ad"></i>
+            <h1>Manage Banners & Offers</h1>
+        </div>
+        <div style="display: flex; gap: 12px;">
+            <a href="admin-dashboard.html" class="btn btn-secondary">
+                <i class="fas fa-arrow-left"></i> Back to Dashboard
+            </a>
+            <a href="index.html" target="_blank" class="btn btn-primary">
+                <i class="fas fa-eye"></i> View Website
+            </a>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="content-grid">
+        <!-- Add/Edit Form -->
+        <div class="form-card">
+            <h2 class="form-title" id="formTitle">
+                <i class="fas fa-plus-circle"></i> Add New Banner
+            </h2>
+
+            <form id="bannerForm">
+                <input type="hidden" id="editIndex">
+
+                <div class="form-group">
+                    <label>Banner Title *</label>
+                    <input type="text" id="bannerTitle" placeholder="e.g. Big Sale Up to 70% OFF" required oninput="updatePreview()">
+                </div>
+
+                <div class="form-group">
+                    <label>Subtitle/Description</label>
+                    <input type="text" id="bannerSubtitle" placeholder="e.g. Best Quality Products at Best Price" oninput="updatePreview()">
+                </div>
+
+                <div class="form-group">
+                    <label>Banner Type *</label>
+                    <select id="bannerType" onchange="updatePreview()">
+                        <option value="hero">Hero Banner (Full Width)</option>
+                        <option value="promo">Promotional Banner</option>
+                        <option value="flash">Flash Sale Banner</option>
+                        <option value="category">Category Banner</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Background Color/Gradient</label>
+                    <input type="color" id="bannerColor" value="#667eea" onchange="updatePreview()">
+                    <div class="form-hint">Click to choose color</div>
+                </div>
+
+                <div class="form-group">
+                    <label>Button Text</label>
+                    <input type="text" id="bannerButtonText" placeholder="e.g. Shop Now" oninput="updatePreview()">
+                </div>
+
+                <div class="form-group">
+                    <label>Button Link</label>
+                    <input type="text" id="bannerButtonLink" placeholder="e.g. #products or https://...">
+                </div>
+
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" id="hasCountdown">
+                        Enable Countdown Timer
+                    </label>
+                    <div class="form-hint">Show limited time offer countdown</div>
+                </div>
+
+                <div id="countdownFields" style="display: none;">
+                    <div class="form-group">
+                        <label>End Date & Time *</label>
+                        <input type="datetime-local" id="countdownDate">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" id="bannerActive" checked>
+                        Active (Show on website)
+                    </label>
+                </div>
+
+                <!-- Live Preview -->
+                <div class="banner-preview live" id="bannerPreview">
+                    <div>
+                        <h3 id="previewTitle">Big Sale Up to 70% OFF</h3>
+                        <p id="previewSubtitle">Best Quality Products at Best Price</p>
+                        <button class="btn" style="background: white; color: var(--primary); margin-top: 15px;" id="previewBtn">
+                            Shop Now
+                        </button>
+                        <div class="countdown-timer" id="previewCountdown" style="display: none;">
+                            ⏰ <span id="countdownText">00d 00h 00m 00s</span>
+                        </div>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary" style="width: 100%; justify-content: center; margin-top: 20px;">
+                    <i class="fas fa-save"></i>
+                    <span id="submitText">Save Banner</span>
+                </button>
+
+                <button type="button" class="btn btn-secondary" id="cancelEdit" style="width: 100%; justify-content: center; margin-top: 10px; display: none;">
+                    <i class="fas fa-times"></i> Cancel
+                </button>
+            </form>
+        </div>
+
+        <!-- Banners List -->
+        <div class="list-card">
+            <h2 class="form-title">
+                <i class="fas fa-list"></i> All Banners
+            </h2>
+
+            <div id="bannersList">
+                <!-- Banners will load here -->
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // ==============================
+    // BANNER MANAGEMENT SYSTEM
+    // ==============================
+
+    let banners = JSON.parse(localStorage.getItem('banners')) || [
+        {
+            id: 1,
+            title: "Big Sale Up to 70% OFF",
+            subtitle: "Best Quality Products at Best Price in Bangladesh",
+            type: "hero",
+            color: "#667eea",
+            buttonText: "Shop Now",
+            buttonLink: "#products",
+            hasCountdown: false,
+            countdownDate: null,
+            active: true,
+            image: null
+        }
+    ];
+
+    let editIndex = -1;
+
+    document.addEventListener('DOMContentLoaded', () => {
+        if (localStorage.getItem('adminLogin') !== 'true') {
+            window.location.href = 'admin-login.html';
+            return;
+        }
+        loadBanners();
+        updatePreview();
+    });
+
+    // Toggle countdown fields
+    document.getElementById('hasCountdown').addEventListener('change', function() {
+        document.getElementById('countdownFields').style.display = this.checked ? 'block' : 'none';
+        updatePreview();
+    });
+
+    // Update live preview
+    function updatePreview() {
+        const title = document.getElementById('bannerTitle').value || 'Big Sale Up to 70% OFF';
+        const subtitle = document.getElementById('bannerSubtitle').value || 'Best Quality Products at Best Price';
+        const buttonText = document.getElementById('bannerButtonText').value || 'Shop Now';
+        const color = document.getElementById('bannerColor').value;
+        const hasCountdown = document.getElementById('hasCountdown').checked;
+
+        document.getElementById('previewTitle').textContent = title;
+        document.getElementById('previewSubtitle').textContent = subtitle;
+        document.getElementById('previewBtn').textContent = buttonText;
+        document.getElementById('bannerPreview').style.background = `linear-gradient(135deg, ${color} 0%, ${color}dd 100%)`;
+        
+        const countdownDiv = document.getElementById('previewCountdown');
+        if (hasCountdown) {
+            countdownDiv.style.display = 'block';
+            startPreviewCountdown();
+        } else {
+            countdownDiv.style.display = 'none';
+        }
+    }
+
+    function startPreviewCountdown() {
+        const countdownDate = document.getElementById('countdownDate').value;
+        if (!countdownDate) return;
+
+        const interval = setInterval(() => {
+            const now = new Date().getTime();
+            const distance = new Date(countdownDate).getTime() - now;
+
+            if (distance < 0) {
+                clearInterval(interval);
+                document.getElementById('countdownText').textContent = "EXPIRED";
+                return;
+            }
+
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            document.getElementById('countdownText').textContent = 
+                `${days}d ${hours}h ${minutes}m ${seconds}s`;
+        }, 1000);
+    }
+
+    // Form submit
+    document.getElementById('bannerForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        const bannerData = {
+            id: editIndex >= 0 ? banners[editIndex].id : Date.now(),
+            title: document.getElementById('bannerTitle').value,
+            subtitle: document.getElementById('bannerSubtitle').value,
+            type: document.getElementById('bannerType').value,
+            color: document.getElementById('bannerColor').value,
+            buttonText: document.getElementById('bannerButtonText').value,
+            buttonLink: document.getElementById('bannerButtonLink').value,
+            hasCountdown: document.getElementById('hasCountdown').checked,
+            countdownDate: document.getElementById('hasCountdown').checked ? 
+                          document.getElementById('countdownDate').value : null,
+            active: document.getElementById('bannerActive').checked,
+            image: null,
+            createdAt: editIndex >= 0 ? banners[editIndex].createdAt : new Date().toISOString()
+        };
+
+        if (editIndex >= 0) {
+            banners[editIndex] = bannerData;
+        } else {
+            banners.push(bannerData);
+        }
+
+        localStorage.setItem('banners', JSON.stringify(banners));
+        loadBanners();
+        resetForm();
+        alert('Banner saved successfully!');
+    });
+
+    // Load banners list
+    function loadBanners() {
+        const container = document.getElementById('bannersList');
+        
+        if (banners.length === 0) {
+            container.innerHTML = `
+                <div class="empty-state">
+                    <i class="fas fa-ad"></i>
+                    <h3>No banners yet</h3>
+                    <p>Add your first banner to start promoting</p>
+                </div>
+            `;
+            return;
+        }
+
+        container.innerHTML = '';
+        banners.forEach((banner, index) => {
+            const item = document.createElement('div');
+            item.className = `banner-item ${!banner.active ? 'inactive' : ''}`;
+            item.innerHTML = `
+                <div class="banner-thumb" style="background: linear-gradient(135deg, ${banner.color} 0%, ${banner.color}dd 100%); color: white; display: flex; align-items: center; justify-content: center; text-align: center; padding: 20px;">
+                    <div>
+                        <h4 style="color: white; margin-bottom: 10px;">${banner.title}</h4>
+                        <p style="color: white; opacity: 0.9;">${banner.subtitle}</p>
+                    </div>
+                </div>
+                <div class="banner-info">
+                    <h4>${banner.title}</h4>
+                    <p><strong>Type:</strong> ${banner.type.toUpperCase()}</p>
+                    <p><strong>Button:</strong> ${banner.buttonText || 'N/A'}</p>
+                    ${banner.hasCountdown ? `<p><strong>Ends:</strong> ${new Date(banner.countdownDate).toLocaleString()}</p>` : ''}
+                    <span class="banner-status ${banner.active ? 'status-active' : 'status-inactive'}">
+                        <i class="fas fa-${banner.active ? 'check' : 'times'}-circle"></i>
+                        ${banner.active ? 'Active' : 'Inactive'}
+                    </span>
+                </div>
+                <div class="banner-actions">
+                    <button class="action-btn edit" onclick="editBanner(${index})">
+                        <i class="fas fa-edit"></i> Edit
+                    </button>
+                    <button class="action-btn toggle" onclick="toggleBanner(${index})">
+                        <i class="fas fa-${banner.active ? 'eye-slash' : 'eye'}"></i> 
+                        ${banner.active ? 'Disable' : 'Enable'}
+                    </button>
+                    <button class="action-btn delete" onclick="deleteBanner(${index})">
+                        <i class="fas fa-trash"></i> Delete
+                    </button>
+                </div>
+            `;
+            container.appendChild(item);
+        });
+    }
+
+    function editBanner(index) {
+        const banner = banners[index];
+        editIndex = index;
+
+        document.getElementById('bannerTitle').value = banner.title;
+        document.getElementById('bannerSubtitle').value = banner.subtitle;
+        document.getElementById('bannerType').value = banner.type;
+        document.getElementById('bannerColor').value = banner.color;
+        document.getElementById('bannerButtonText').value = banner.buttonText;
+        document.getElementById('bannerButtonLink').value = banner.buttonLink;
+        document.getElementById('hasCountdown').checked = banner.hasCountdown;
+        document.getElementById('countdownDate').value = banner.countdownDate || '';
+        document.getElementById('bannerActive').checked = banner.active;
+        document.getElementById('countdownFields').style.display = banner.hasCountdown ? 'block' : 'none';
+
+        document.getElementById('formTitle').innerHTML = '<i class="fas fa-edit"></i> Edit Banner';
+        document.getElementById('submitText').textContent = 'Update Banner';
+        document.getElementById('cancelEdit').style.display = 'flex';
+
+        updatePreview();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function toggleBanner(index) {
+        banners[index].active = !banners[index].active;
+        localStorage.setItem('banners', JSON.stringify(banners));
+        loadBanners();
+    }
+
+    function deleteBanner(index) {
+        if (confirm('Are you sure you want to delete this banner?')) {
+            banners.splice(index, 1);
+            localStorage.setItem('banners', JSON.stringify(banners));
+            loadBanners();
+        }
+    }
+
+    function resetForm() {
+        document.getElementById('bannerForm').reset();
+        editIndex = -1;
+        document.getElementById('formTitle').innerHTML = '<i class="fas fa-plus-circle"></i> Add New Banner';
+        document.getElementById('submitText').textContent = 'Save Banner';
+        document.getElementById('cancelEdit').style.display = 'none';
+        document.getElementById('countdownFields').style.display = 'none';
+        updatePreview();
+    }
+
+    document.getElementById('cancelEdit').addEventListener('click', resetForm);
+</script>
+
+</body>
+</html>

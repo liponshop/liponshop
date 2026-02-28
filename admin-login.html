@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Login - LiponShop</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+--primary: #4f46e5;
+--primary-dark: #4338ca;
+--danger: #ef4444;
+--success: #10b981;
+--dark: #1f2937;
+--white: #ffffff;
+--gray: #6b7280;
+--border: #e5e7eb;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+body {
+background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+min-height: 100vh;
+display: flex;
+align-items: center;
+justify-content: center;
+padding: 20px;
+}
+.login-container {
+background: var(--white);
+padding: 40px;
+border-radius: 16px;
+box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+max-width: 450px;
+width: 100%;
+}
+.login-header {
+text-align: center;
+margin-bottom: 30px;
+}
+.login-header i {
+font-size: 48px;
+color: var(--primary);
+margin-bottom: 15px;
+}
+.login-header h1 {
+font-size: 28px;
+color: var(--dark);
+margin-bottom: 5px;
+}
+.login-header p {
+color: var(--gray);
+font-size: 14px;
+}
+.form-group {
+margin-bottom: 20px;
+}
+.form-group label {
+display: block;
+margin-bottom: 8px;
+font-weight: 500;
+color: var(--dark);
+}
+.form-group input {
+width: 100%;
+padding: 12px 15px;
+border: 2px solid var(--border);
+border-radius: 10px;
+font-size: 14px;
+transition: all 0.3s;
+}
+.form-group input:focus {
+border-color: var(--primary);
+outline: none;
+box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.1);
+}
+.btn-login {
+width: 100%;
+padding: 14px;
+background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+color: var(--white);
+border: none;
+border-radius: 10px;
+font-size: 16px;
+font-weight: 600;
+cursor: pointer;
+transition: all 0.3s;
+}
+.btn-login:hover {
+transform: translateY(-2px);
+box-shadow: 0 10px 25px rgba(79, 70, 229, 0.3);
+}
+.back-link {
+display: block;
+text-align: center;
+margin-top: 20px;
+color: var(--gray);
+text-decoration: none;
+font-size: 14px;
+}
+.back-link:hover { color: var(--primary); }
+.alert {
+padding: 12px 15px;
+border-radius: 8px;
+margin-bottom: 20px;
+display: none;
+}
+.alert-error {
+background: #fee2e2;
+color: #991b1b;
+border: 1px solid var(--danger);
+}
+.alert-error.show { display: block; }
+.forgot-link {
+display: block;
+text-align: right;
+margin-top: -10px;
+margin-bottom: 20px;
+color: var(--primary);
+text-decoration: none;
+font-size: 13px;
+}
+.forgot-link:hover { text-decoration: underline; }
+</style>
+</head>
+<body>
+<div class="login-container">
+<div class="login-header">
+<i class="fas fa-shield-alt"></i>
+<h1>Admin Login</h1>
+<p>Access your admin dashboard</p>
+</div>
+
+<div class="alert alert-error" id="alertError"></div>
+
+<form id="adminLoginForm">
+<div class="form-group">
+<label><i class="fas fa-user"></i> Username</label>
+<input type="text" id="adminUsername" placeholder="Enter username" required>
+</div>
+
+<div class="form-group">
+<label><i class="fas fa-lock"></i> Password</label>
+<input type="password" id="adminPassword" placeholder="Enter password" required>
+</div>
+
+<a href="admin-forgot-password.html" class="forgot-link">Forgot Password?</a>
+
+<button type="submit" class="btn-login">
+<i class="fas fa-sign-in-alt"></i> Login to Admin Panel
+</button>
+</form>
+
+<a href="index.html" class="back-link">
+<i class="fas fa-arrow-left"></i> Back to Shop
+</a>
+</div>
+
+<script>
+document.getElementById('adminLoginForm').addEventListener('submit', function(e) {
+e.preventDefault();
+
+const username = document.getElementById('adminUsername').value;
+const password = document.getElementById('adminPassword').value;
+const alertError = document.getElementById('alertError');
+
+// Get admin credentials
+const adminData = JSON.parse(localStorage.getItem('adminData')) || {
+username: 'admin',
+password: 'admin123'
+};
+
+if (username === adminData.username && password === adminData.password) {
+localStorage.setItem('adminLogin', 'true');
+localStorage.setItem('adminUsername', username);
+alert('✅ Admin login successful!');
+window.location.href = 'admin-dashboard.html';
+} else {
+alertError.textContent = '❌ Invalid username or password!';
+alertError.classList.add('show');
+}
+});
+</script>
+</body>
+</html>
