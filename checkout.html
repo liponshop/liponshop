@@ -966,9 +966,57 @@ SMS/WhatsApp এ ট্র্যাকিং লিংক পাঠানো হ
 <button class="modal-btn" onclick="trackOrder()" style="background: var(--secondary); margin-top: 10px;">
 <i class="fas fa-truck"></i> অর্ডার ট্র্যাক করুন
 </button>
+
+<h1 data-i18n="checkout">Checkout</h1>
+<a href="cart.html" data-i18n="backToCart">Back to Cart</a>
+
+<h2 data-i18n="guestCheckout">Guest Checkout (Order without account)</h2>
+
+<h3 data-i18n="customerInfo">Customer Information</h3>
+<label data-i18n="fullName">Full Name</label>
+<label data-i18n="mobileNumber">Mobile Number</label>
+<span data-i18n="format">Format</span>: 01712345678
+<label data-i18n="emailAddress">Email Address</label>
+<label data-i18n="deliveryAddress">Delivery Address</label>
+<span data-i18n="houseRoad">House/Road</span>
+<label data-i18n="district">District</label>
+<option data-i18n="selectDistrict">Select District</option>
+
+<h3 data-i18n="deliveryOption">Delivery Option</h3>
+<div class="delivery-option">
+    <h4 data-i18n="regularDelivery">Regular Delivery</h4>
+    <span>৩-৫ <span data-i18n="workingDays">working days</span></span>
+    <span>৳60</span>
+</div>
+<div class="delivery-option">
+    <h4 data-i18n="expressDelivery">Express Delivery</h4>
+    <span>১-২ <span data-i18n="workingDays">working days</span></span>
+    <span>৳110</span>
+</div>
+
+<h3 data-i18n="paymentMethod">Payment Method</h3>
+<div data-i18n="cashOnDelivery">Cash on Delivery</div>
+
+<h3 data-i18n="orderSummary">Order Summary</h3>
+<div class="summary-row">
+    <span data-i18n="subtotal">Subtotal</span>
+    <span>৳0</span>
+</div>
+<div class="summary-row">
+    <span data-i18n="deliveryCharge">Delivery Charge</span>
+    <span>৳60</span>
+</div>
+<div class="summary-row total">
+    <span data-i18n="total">Total</span>
+    <span>৳0</span>
+</div>
+<p data-i18n="insideGaibandha">Free delivery on orders over ৳1000 inside Gaibandha</p>
+
+<button class="btn-primary" data-i18n="placeOrder">Place Order</button>
 </div>
 </div>
 
+<script src="js/language.js"></script>
 <script src="js/products.js"></script>
 <script src="js/cart.js"></script>
 <script src="js/locations.js"></script>

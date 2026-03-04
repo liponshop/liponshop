@@ -403,3 +403,31 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 });
+
+// Language Change Function
+function changeLanguage() {
+    const lang = document.getElementById('languageSelect').value;
+    
+    if (lang === 'en') {
+        // English
+        document.documentElement.lang = 'en';
+        // এখানে আপনার টেক্সট পরিবর্তন লজিক যুক্ত করুন
+        alert('Language changed to English (Feature coming soon!)');
+    } else {
+        // বাংলা
+        document.documentElement.lang = 'bn';
+        alert('ভাষা পরিবর্তন করে বাংলা করা হয়েছে (Feature coming soon!)');
+    }
+    
+    // LocalStorage এ সেভ করুন
+    localStorage.setItem('selectedLanguage', lang);
+}
+
+// Page load এ ভাষা লোড করুন
+document.addEventListener('DOMContentLoaded', function() {
+    const savedLang = localStorage.getItem('selectedLanguage') || 'bn';
+    const langSelect = document.getElementById('languageSelect');
+    if (langSelect) {
+        langSelect.value = savedLang;
+    }
+});

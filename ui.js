@@ -95,3 +95,25 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 });
+
+// Language Change Function
+function changeLanguage() {
+    const lang = document.getElementById('languageSelect').value;
+    localStorage.setItem('selectedLanguage', lang);
+    
+    if (lang === 'en') {
+        document.documentElement.lang = 'en';
+        // এখানে টেক্সট পরিবর্তন লজিক যুক্ত করুন
+    } else {
+        document.documentElement.lang = 'bn';
+    }
+}
+
+// Page Load এ ভাষা লোড
+document.addEventListener('DOMContentLoaded', function() {
+    const savedLang = localStorage.getItem('selectedLanguage') || 'bn';
+    const langSelect = document.getElementById('languageSelect');
+    if (langSelect) {
+        langSelect.value = savedLang;
+    }
+});
